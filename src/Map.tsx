@@ -5,14 +5,14 @@ import 'leaflet/dist/leaflet.css';
 interface MapSizeProp {
     height : number,
     width : number
+    setCords: (coords: [number, number]) => void
 }
 
-const Map = ({height, width} : MapSizeProp) => {
+const Map = ({height, width, setCords} : MapSizeProp) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const currentMarker = useRef<L.Marker | null>(null);
 
-  const [markerCords, set_cords] = useState<[number, number] | null>(null);
 
   useEffect(() => {
     if (mapContainer.current && !mapInstance.current) {
@@ -39,7 +39,7 @@ const Map = ({height, width} : MapSizeProp) => {
         marker.addTo(mapInstance.current!);
 
         currentMarker.current = marker;
-        set_cords([e.latlng.lat, e.latlng.lng]);
+        setCords([e.latlng.lat, e.latlng.lng]);
       });
 
   }
