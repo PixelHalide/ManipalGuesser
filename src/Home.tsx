@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 //import Image from './Image'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { gps } from "exifr";
-import ScoreScreen from './ScoreScreen';
+import ScoreScreen from './GuessScreen/ScoreScreen';
 import Map from './Map'
 import test from './assets/test.jpg'
 
@@ -68,7 +68,7 @@ const Home = () => {
     if (distanceInMeters < 5) {
       distanceInMeters = 0;
     }
-    let points = -2.5855*distanceInMeters + 5000
+    let points = -2.59*distanceInMeters + 5000
     /*
     Assuming a square map of 1.87km^2, if the guess is on the opposite corner, the points awarded are 0
     Fo a perfect guess, 5k points are awarded.
@@ -81,7 +81,7 @@ const Home = () => {
 
   return (
     <div>
-                    {guessSubmitted && markerCords && imageCords && <ScoreScreen
+            {guessSubmitted && markerCords && imageCords && <ScoreScreen
             attainedScore={points}
             clickedLocation={markerCords}
             actualLocation={imageCords}

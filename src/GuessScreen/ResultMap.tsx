@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import finalMarker from './assets/FinalMarker.png';
+import finalMarker from '../assets/FinalMarker.png';
 
 interface MapSizeProp {
     clickedLocation: [number, number],
