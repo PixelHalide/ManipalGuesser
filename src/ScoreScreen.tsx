@@ -15,7 +15,7 @@ const ScoreScreen = ({ attainedScore, clickedLocation, actualLocation } : ScoreP
             actualLocation={actualLocation}
             />
         </div>
-
+    <p>Attained Score: {attainedScore}</p>
     </div>
   )
 }
