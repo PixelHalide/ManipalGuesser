@@ -12,6 +12,7 @@ const Home = () => {
     const [imageCords, set_image_cords] =  useState<[number, number] | null>();
     const [mapHover, set_hover] = useState(false);
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
+    const [guessSubmitted, set_submit] = useState(false);
 
     // Extract EXIF GPS data from the test image on mount using exifr
     useEffect(() => {
@@ -75,16 +76,18 @@ const Home = () => {
    if (points < 0) points = 0;
     console.log(points);
     set_points(points);
+    set_submit(true);
   }
 
   return (
     <div>
-        <div className='flex justify-center items-center min-h-screen'>
-            {markerCords && imageCords && <ScoreScreen
+                    {guessSubmitted && markerCords && imageCords && <ScoreScreen
             attainedScore={points}
             clickedLocation={markerCords}
             actualLocation={imageCords}
             />}
+        <div className='flex justify-center items-center min-h-screen'>
+
             <div className='relative'>
                 <TransformWrapper>
                     <TransformComponent>
