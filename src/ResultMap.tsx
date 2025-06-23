@@ -16,8 +16,8 @@ const ResultMap = ({clickedLocation, actualLocation}: MapSizeProp) => {
     const actualIcon = L.icon({
         iconUrl: finalMarker,
 
-        iconSize:     [38, 95], // size of the icon
-        iconAnchor:   [19, 95], // centered bottom of the icon
+        iconSize:     [32, 44.9], // size of the icon
+        iconAnchor:   [16, 44.9], // centered bottom of the icon
         popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
     });
 
