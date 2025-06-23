@@ -13,7 +13,6 @@ const Map = ({height, width, setCords} : MapSizeProp) => {
   const mapInstance = useRef<L.Map | null>(null);
   const currentMarker = useRef<L.Marker | null>(null);
 
-
   useEffect(() => {
     if (mapContainer.current && !mapInstance.current) {
       const mapOptions = {
@@ -41,7 +40,6 @@ const Map = ({height, width, setCords} : MapSizeProp) => {
         currentMarker.current = marker;
         setCords([e.latlng.lat, e.latlng.lng]);
       });
-
   }
 
     return () => {
@@ -57,8 +55,6 @@ const Map = ({height, width, setCords} : MapSizeProp) => {
       mapInstance.current.invalidateSize();
     }
   }, [height, width]);
-
-
 
   return <div ref={mapContainer} style={{height, width}} className='transiton-all rounded-md'></div>
 

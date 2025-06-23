@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react'
 //import Image from './Image'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { gps } from "exifr";
+import ScoreScreen from './ScoreScreen';
 import Map from './Map'
 import test from './assets/test.jpg'
 
 const Home = () => {
 
+    const [points, set_points] =  useState<number>(0);
     const [imageCords, set_image_cords] =  useState<[number, number] | null>();
-
     const [mapHover, set_hover] = useState(false);
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
 
@@ -73,11 +74,17 @@ const Home = () => {
     */
    if (points < 0) points = 0;
     console.log(points);
+    set_points(points);
   }
 
   return (
     <div>
         <div className='flex justify-center items-center min-h-screen'>
+            {markerCords && imageCords && <ScoreScreen
+            attainedScore={points}
+            clickedLocation={markerCords}
+            actualLocation={imageCords}
+            />}
             <div className='relative'>
                 <TransformWrapper>
                     <TransformComponent>
