@@ -100,7 +100,7 @@ const Home = () => {
                     width={mapHover ? 400 : 125}
                     setCords={fetchCords}
                     />
-                    <button
+                    {!guessSubmitted && <button
                         className={`inline-flex h-12 items-center justify-center rounded-md px-6 font-medium mt-2 transition-all ${
                             markerCords
                                 ? 'bg-neutral-950 text-neutral-50 active:scale-110 cursor-pointer'
@@ -111,7 +111,7 @@ const Home = () => {
                         disabled={!markerCords}
                     >
                         Submit
-                    </button>
+                    </button>}
                 </div>
             </div>
         </div>
