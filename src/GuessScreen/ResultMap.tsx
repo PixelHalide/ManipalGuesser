@@ -13,7 +13,7 @@ const ResultMap = ({clickedLocation, actualLocation}: MapSizeProp) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
 
-    const actualIcon = L.icon({
+  const actualIcon = L.icon({
         iconUrl: finalMarker,
 
         iconSize:     [32, 44.9], // size of the icon
@@ -48,6 +48,7 @@ const ResultMap = ({clickedLocation, actualLocation}: MapSizeProp) => {
         mapInstance.current!.removeLayer(layer as any);
       }
     });
+    const Line = [actualLocation, clickedLocation]
     // clicked marker
     if (clickedLocation && clickedLocation[0] != null) {
       L.marker(clickedLocation).addTo(mapInstance.current);
@@ -55,9 +56,9 @@ const ResultMap = ({clickedLocation, actualLocation}: MapSizeProp) => {
     // actual location marker
     if (actualLocation && actualLocation[0] != null) {
       L.marker(actualLocation, { icon: actualIcon }).addTo(mapInstance.current);
+      L.polyline(Line, {color: 'red'}).addTo(mapInstance.current);;
     }
   }, [clickedLocation, actualLocation]);
-
 
   return <div ref={mapContainer} style={{ width: 1000, height: 500 }} className='transiton-all rounded-md'></div>
 

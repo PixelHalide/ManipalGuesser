@@ -1,3 +1,4 @@
+import "@theme-toggles/react/css/Expand.css"
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from "./Navbar"

@@ -91,7 +91,7 @@ const Home = () => {
             <div className='relative'>
                 <TransformWrapper>
                     <TransformComponent>
-                        <img src={test} className='max-w-screen max-h-screen'/>
+                        <img src={test} className='max-w-screen max-h-screen object-cover'/>
                     </TransformComponent>
                 </TransformWrapper>
                 {!guessSubmitted && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>

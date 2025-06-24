@@ -1,3 +1,4 @@
+import { Expand } from "@theme-toggles/react"
 import dark_logo from './assets/logo.png'
 import logo from './assets/logo_black.png'
 
@@ -34,11 +35,7 @@ const Navbar = ({switchTheme, darkState} : DarkModeProp) => {
                   </div>
                 </div>
               </div>
-            <div className='hover:bg-neutral-900 px-2 py-1.5 rounded-2xl transition duration-200 bg-black text-white dark:hover:text-neutral-200 dark:text-black dark:bg-white cursor-pointer'>
-              <div onClick={() => {switchTheme()}} className="px-4 rounded transition-all active:scale-110">
-                Switch Theme
-              </div>
-            </div>
+            <Expand toggled={darkState} toggle={switchTheme}  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  />
         </nav>
     </div>
   )
