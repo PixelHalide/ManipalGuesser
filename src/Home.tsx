@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
-//import Image from './Image'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { gps } from "exifr";
 import ScoreScreen from './GuessScreen/ScoreScreen';
 import Map from './Map'
-import test from './assets/test.jpg'
 
 const Home = () => {
 
@@ -13,12 +11,15 @@ const Home = () => {
     const [mapHover, set_hover] = useState(false);
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
     const [guessSubmitted, set_submit] = useState(false);
+    const [mapNumber, set_map] = useState(Math.floor((Math.random() * 15) + 1));
+
+    const imgPath = `/manipalPictures/${mapNumber}.jpg`
 
     // Extract EXIF GPS data from the test image on mount using exifr
     useEffect(() => {
         async function extractExif() {
             try {
-                const response = await fetch(test);
+                const response = await fetch(imgPath);
                 const blob = await response.blob();
                 const coords = await gps(blob as Blob);
                 if (coords?.latitude != null && coords?.longitude != null) {
@@ -91,7 +92,7 @@ const Home = () => {
             <div className='relative'>
                 <TransformWrapper>
                     <TransformComponent>
-                        <img src={test} className='max-w-screen max-h-screen object-cover'/>
+                        <img src={imgPath} className='max-w-screen max-h-screen object-fit'/>
                     </TransformComponent>
                 </TransformWrapper>
                 {!guessSubmitted && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>
