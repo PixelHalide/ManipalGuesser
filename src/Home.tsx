@@ -65,8 +65,8 @@ const Home = () => {
     // Distance in meters
     let distanceInMeters = R * c;
 
-    // if distance is less than 5 meters, set to 0
-    if (distanceInMeters < 5) {
+    // if distance is less than 10 meters, set to 0
+    if (distanceInMeters < 10) {
       distanceInMeters = 0;
     }
     let points = -2.59*distanceInMeters + 5000
