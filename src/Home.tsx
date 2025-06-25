@@ -11,7 +11,7 @@ const Home = () => {
     const [mapHover, set_hover] = useState(false);
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
     const [guessSubmitted, set_submit] = useState(false);
-    const [mapNumber] = useState(Math.floor((Math.random() * 15) + 1));
+    const [mapNumber, set_map] = useState(Math.floor((Math.random() * 15) + 1));
 
     const imgPath = `/manipalPictures/${mapNumber}.jpg`
 
@@ -32,7 +32,7 @@ const Home = () => {
             }
         }
         extractExif();
-    }, []);
+    }, [mapNumber]);
 
     const fetchCords = (cords: [number, number]) => {
         set_cords([cords[0],cords[1]]);
@@ -40,6 +40,16 @@ const Home = () => {
 
     const toRadians = (deg: number): number => deg * Math.PI / 180;
 
+    const resetGame = () => {
+        // Reset all game state
+        set_points(0);
+        set_image_cords(null);
+        set_hover(false);
+        set_cords(null);
+        set_submit(false);
+        // Generate new random map number
+        set_map(Math.floor((Math.random() * 15) + 1));
+    };
 
   const submitGuess = () => {
     if (!markerCords || ! imageCords) {
@@ -82,17 +92,18 @@ const Home = () => {
 
   return (
     <div>
-            {guessSubmitted && markerCords && imageCords && <ScoreScreen
+        {guessSubmitted && markerCords && imageCords && <ScoreScreen
             attainedScore={points}
             clickedLocation={markerCords}
             actualLocation={imageCords}
+            onNextGame={resetGame}
             />}
-        <div className='flex justify-center items-center min-h-screen'>
+        <div className='flex justify-center items-center min-h-screen max'>
 
             <div className='relative'>
                 <TransformWrapper>
                     <TransformComponent>
-                        <img src={imgPath} className='max-w-screen max-h-screen object-fit'/>
+                        <img src={imgPath} className='max-w-screen max-h-screen object-contain h-fit'/>
                     </TransformComponent>
                 </TransformWrapper>
                 {!guessSubmitted && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>

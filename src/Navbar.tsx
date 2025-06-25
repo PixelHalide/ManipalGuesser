@@ -26,7 +26,7 @@ const Navbar = ({switchTheme, darkState} : DarkModeProp) => {
                 </div>
                 <div className='hover:bg-gray-200 p-2 rounded-2xl transition duration-200 dark:hover:text-black'>
                   <div className="py-1 px-4 rounded hover:text-gray-700 transition-all">
-                    About Us
+                    Leaderboard
                   </div>
                 </div>
                 <div className='hover:bg-gray-200 p-2 rounded-2xl transition duration-200 dark:hover:text-black'>
