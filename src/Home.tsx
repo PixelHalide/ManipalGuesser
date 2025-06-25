@@ -11,7 +11,7 @@ const Home = () => {
     const [mapHover, set_hover] = useState(false);
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
     const [guessSubmitted, set_submit] = useState(false);
-    const [mapNumber, set_map] = useState(Math.floor((Math.random() * 15) + 1));
+    const [mapNumber] = useState(Math.floor((Math.random() * 15) + 1));
 
     const imgPath = `/manipalPictures/${mapNumber}.jpg`
 
