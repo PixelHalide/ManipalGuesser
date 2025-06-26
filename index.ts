@@ -1,8 +1,10 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const {MongoClient} = require('mongodb');
-const dotenv = require('dotenv');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
+import pkg from 'exifr';
+const { gps } = pkg;
 
 dotenv.config()
 
@@ -13,6 +15,10 @@ app.use(cors());
 const PORT = process.env.PORT;``
 const CONNECTION_STRING = process.env.CONNECTION_STRING;
 const DB_NAME = process.env.DB_NAME;
+
+if (!CONNECTION_STRING) {
+  throw new Error('CONNECTION_STRING environment variable is not defined');
+}
 
 const client = new MongoClient(CONNECTION_STRING);
 
@@ -33,38 +39,63 @@ app.get('/',(req,res) => {
   res.status(200).send("API is Up");
 })
 
-app.post('/form', async (req,res) => {
+app.post('/calcScore', async (req,res) => {
     try{    const {
-        name,
-        email,
-        message
+        mapNumber,
+        submittedCords
     } = req.body
 
-    if (
-      typeof message !== 'string' ||
-      message.length === 0 ||
-      message.length > 400 || // Limit length
-      /[$<>]/.test(message)    // Prevent some special characters
-    ) {
-      return res.status(400).send({ error: "Invalid message input" });
+    //const db = client.db(DB_NAME);
+    //const collection = db.collection("reactTravel");
+    //const time = Date.now()
+
+    const imgPath = `./public/manipalPictures/${mapNumber}.jpg`
+
+    const coords = await gps(imgPath);
+    let imageCords;
+    if (coords?.latitude != null && coords?.longitude != null) {
+        imageCords = [coords.latitude, coords.longitude];
+    } else {
+        throw new Error('No GPS data found in EXIF');
     }
 
-    const db = client.db(DB_NAME);
-    const collection = db.collection("reactTravel");
-    const time = Date.now()
+    const toRadians = (deg: number): number => deg * Math.PI / 180;
 
-    const docToInsert = {
-        "time": time,
-        "name": name,
-        "email": email,
-        "message": message
+    const R = 6371e3; // Earth's radius
+    const lat1 = toRadians(imageCords[0]);
+    const lon1 = toRadians(imageCords[1]);
+    const lat2 = toRadians(submittedCords[0]);
+    const lon2 = toRadians(submittedCords[1]);
+
+    const deltaLat = lat2 - lat1;
+    const deltaLon = lon2 - lon1;
+
+    // Haversine formula
+    const a =
+      Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    // Distance in meters
+    let distanceInMeters = R * c;
+
+    // if distance is less than 10 meters, set to 0
+    if (distanceInMeters < 10) {
+      distanceInMeters = 0;
     }
+    let points = -2.59*distanceInMeters + 5000
+    /*
+    Assuming a square map of 1.87km^2, if the guess is on the opposite corner, the points awarded are 0
+    Fo a perfect guess, 5k points are awarded.
+    */
+   if (points < 0) points = 0;
+    console.log(points);
 
-    await collection.insertOne(docToInsert);
 
-    res.status(200).send({ success: true });
+    res.status(200).send({points});
+
 } catch (error){
-    console.log("Invalid Input");
+    console.log(error);
     return res.status(500).send({ error: "Error generating response" });
   }
 })

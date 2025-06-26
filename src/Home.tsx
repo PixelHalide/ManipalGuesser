@@ -38,8 +38,6 @@ const Home = () => {
         set_cords([cords[0],cords[1]]);
     }
 
-    const toRadians = (deg: number): number => deg * Math.PI / 180;
-
     const resetGame = () => {
         // Reset all game state
         set_points(0);
@@ -51,42 +49,25 @@ const Home = () => {
         set_map(Math.floor((Math.random() * 15) + 1));
     };
 
-  const submitGuess = () => {
+  const submitGuess = async () => {
     if (!markerCords || ! imageCords) {
       console.log('no marker coordinates selected.');
       return;
     }
-
-    const R = 6371e3; // Earth's radius
-    const lat1 = toRadians(imageCords[0]);
-    const lon1 = toRadians(imageCords[1]);
-    const lat2 = toRadians(markerCords[0]);
-    const lon2 = toRadians(markerCords[1]);
-
-    const deltaLat = lat2 - lat1;
-    const deltaLon = lon2 - lon1;
-
-    // Haversine formula
-    const a =
-      Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-      Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    // Distance in meters
-    let distanceInMeters = R * c;
-
-    // if distance is less than 10 meters, set to 0
-    if (distanceInMeters < 10) {
-      distanceInMeters = 0;
+    const response = await fetch("http://localhost:8000/calcScore", {
+        method:"POST",
+        headers: {'Content-Type': 'application/json', },
+        body: JSON.stringify({"mapNumber":mapNumber,"submittedCords":markerCords}),
+    })
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Something went wrong on the server.');
     }
-    let points = -2.59*distanceInMeters + 5000
-    /*
-    Assuming a square map of 1.87km^2, if the guess is on the opposite corner, the points awarded are 0
-    Fo a perfect guess, 5k points are awarded.
-    */
-   if (points < 0) points = 0;
-    console.log(points);
-    set_points(points);
+
+    const data = await response.json();
+
+    console.log(data);
+    set_points(data.points);
     set_submit(true);
   }
 
