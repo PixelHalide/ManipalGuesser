@@ -2,10 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { gps } from "exifr";
 import ScoreScreen from '../Components/GuessScreen/ScoreScreen';
 import Map from '../Components/Map'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+
+interface BackendReturn {
+    points: number
+    imageCords: [number, number]
+}
 
 const Home = () => {
 
@@ -22,43 +26,21 @@ const Home = () => {
         set_map(Math.floor((Math.random() * 15) + 1));
     }, []);
 
-    // Extract EXIF GPS data from the test image on mount using exifr
-    useEffect(() => {
-        if (!mapNumber) return;
-        async function extractExif() {
-            try {
-                const response = await fetch(imgPath);
-                const blob = await response.blob();
-                const coords = await gps(blob as Blob);
-                if (coords?.latitude != null && coords?.longitude != null) {
-                    set_image_cords([coords.latitude, coords.longitude]);
-                } else {
-                    console.log('No GPS data found in EXIF');
-                }
-            } catch (err) {
-                console.error('Error extracting EXIF:', err);
-            }
-        }
-        extractExif();
-    }, [mapNumber, imgPath]);
-
     const fetchCords = (cords: [number, number]) => {
         set_cords([cords[0],cords[1]]);
     }
 
     const resetGame = () => {
-        // Reset all game state
         set_points(0);
         set_image_cords(null);
         set_hover(false);
         set_cords(null);
         set_submit(false);
-        // Generate new random map number
         set_map(Math.floor((Math.random() * 15) + 1));
     };
 
   const submitGuess = async () => {
-    if (!markerCords || ! imageCords) {
+    if (!markerCords) {
       console.log('no marker coordinates selected.');
       return;
     }
@@ -72,10 +54,11 @@ const Home = () => {
         throw new Error(errorData.message || 'Something went wrong on the server.');
     }
 
-    const data = await response.json();
+    const data: BackendReturn = await response.json();
 
     console.log(data);
     set_points(data.points);
+    set_image_cords(data.imageCords)
     set_submit(true);
   }
 
@@ -96,7 +79,7 @@ const Home = () => {
                             <LazyLoadImage
                                 src={imgPath}
                                 alt="Manipal location to guess"
-                                className='max-w-screen max-h-screen object-contain h-fit'
+                                className='max-h-screen object-contain h-fit'
                                 width={1920}
                                 height={1080}
                             />

@@ -3,7 +3,7 @@
 const Leaderboard = () => {
   return (
     <div>
-
+      Hi
     </div>
   )
 }

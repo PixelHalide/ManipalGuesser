@@ -83,7 +83,7 @@ app.post('/calcScore', (req, res) => {
     console.log(points);
 
 
-    res.status(200).send({points});
+    res.status(200).send({points, imageCords});
 
 } catch (error){
     console.log(error);
