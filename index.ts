@@ -1,5 +1,4 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
@@ -10,7 +9,9 @@ dotenv.config()
 
 const app = express();
 
+// Middleware
 app.use(cors());
+app.use(express.json());
 
 const PORT = process.env.PORT || 8000;
 const CONNECTION_STRING = process.env.CONNECTION_STRING;
@@ -22,24 +23,13 @@ if (!CONNECTION_STRING) {
 
 const client = new MongoClient(CONNECTION_STRING);
 
-async function startServer() {
-  await client.connect();
-
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
-
-startServer();
-
-// Middleware
-app.use(bodyParser.json())
-
-app.get('/',(req,res) => {
+// Routes
+app.get('/', (req, res) => {
   res.status(200).send("API is Up");
-})
+});
 
-app.post('/calcScore', async (req,res) => {
+app.post('/calcScore', (req, res) => {
+    (async () => {
     try {
         const {
             mapNumber,
@@ -99,4 +89,16 @@ app.post('/calcScore', async (req,res) => {
     console.log(error);
     return res.status(500).send({ error: "Error generating response" });
   }
-})
+    })();
+});
+
+// Start server
+async function startServer() {
+  await client.connect();
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+startServer();
