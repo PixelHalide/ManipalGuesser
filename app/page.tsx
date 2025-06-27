@@ -2,16 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import dynamic from 'next/dynamic'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { gps } from "exifr";
 import ScoreScreen from '../Components/GuessScreen/ScoreScreen';
-
-// Dynamically import Map component to prevent SSR issues
-const Map = dynamic(() => import('../Components/Map'), {
-    ssr: false,
-    loading: () => <div className="animate-pulse bg-gray-200 rounded" style={{width: 125, height: 125}}>Loading map...</div>
-})
+import Map from '../Components/Map'
 
 const Home = () => {
 
@@ -20,14 +14,7 @@ const Home = () => {
     const [mapHover, set_hover] = useState(false);
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
     const [guessSubmitted, set_submit] = useState(false);
-    const [mapNumber, set_map] = useState(1); // Initialize with a default value
-    const [isClient, setIsClient] = useState(false);
-
-    // Initialize random map number on client side only
-    useEffect(() => {
-        setIsClient(true);
-        set_map(Math.floor((Math.random() * 15) + 1));
-    }, []);
+    const [mapNumber, set_map] = useState(Math.floor((Math.random() * 15) + 1));
 
     const imgPath = `/manipalPictures/${mapNumber}.jpg`
 
@@ -89,63 +76,52 @@ const Home = () => {
 
   return (
     <div>
-        {isClient && (
-            <>
-                {guessSubmitted && markerCords && imageCords && <ScoreScreen
-                    attainedScore={points}
-                    clickedLocation={markerCords}
-                    actualLocation={imageCords}
-                    onNextGame={resetGame}
-                    />}
-                <div className='flex justify-center items-center min-h-screen max'>
+        {guessSubmitted && markerCords && imageCords && <ScoreScreen
+            attainedScore={points}
+            clickedLocation={markerCords}
+            actualLocation={imageCords}
+            onNextGame={resetGame}
+            />}
+        <div className='flex justify-center items-center min-h-screen max'>
 
-                    <div className='relative'>
-                        <TransformWrapper>
-                            <TransformComponent>
-                                <Image
-                                    src={imgPath}
-                                    alt="Manipal location to guess"
-                                    className='max-w-screen max-h-screen object-contain h-fit'
-                                    width={1920}
-                                    height={1080}
-                                    priority
-                                />
-                            </TransformComponent>
-                        </TransformWrapper>
-                        {!guessSubmitted && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>
-                            <Map
-                            height={mapHover ? 400 : 125}
-                            width={mapHover ? 400 : 125}
-                            setCords={fetchCords}
-                            />
-                            <button
-                                className={`inline-flex h-12 items-center justify-center rounded-md px-6 font-medium mt-2 transition-all ${
-                                    markerCords
-                                        ? 'bg-neutral-950 text-neutral-50 active:scale-110 cursor-pointer'
-                                        : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                                }`}
-                                style={{ width: mapHover ? 400 : 125 }}
-                                onClick={() => {
-                                    if (markerCords) {
-                                        submitGuess();
-                                    }
-                                }}
-                                disabled={!markerCords}
-                            >
-                                Submit
-                            </button>
-                        </div>}
-                    </div>
-                </div>
-            </>
-        )}
-        {!isClient && (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="text-center">
-                    <div className="animate-pulse text-lg">Loading Manipal Guessr...</div>
-                </div>
+            <div className='relative'>
+                <TransformWrapper>
+                    <TransformComponent>
+                        <Image
+                            src={imgPath}
+                            alt="Manipal location to guess"
+                            className='max-w-screen max-h-screen object-contain h-fit'
+                            width={1920}
+                            height={1080}
+                            priority
+                        />
+                    </TransformComponent>
+                </TransformWrapper>
+                {!guessSubmitted && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>
+                    <Map
+                    height={mapHover ? 400 : 125}
+                    width={mapHover ? 400 : 125}
+                    setCords={fetchCords}
+                    />
+                    <button
+                        className={`inline-flex h-12 items-center justify-center rounded-md px-6 font-medium mt-2 transition-all ${
+                            markerCords
+                                ? 'bg-neutral-950 text-neutral-50 active:scale-110 cursor-pointer'
+                                : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        }`}
+                        style={{ width: mapHover ? 400 : 125 }}
+                        onClick={() => {
+                            if (markerCords) {
+                                submitGuess();
+                            }
+                        }}
+                        disabled={!markerCords}
+                    >
+                        Submit
+                    </button>
+                </div>}
             </div>
-        )}
+        </div>
     </div>
   )
 }

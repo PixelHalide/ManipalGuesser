@@ -1,5 +1,19 @@
-import ResultMap from "./ResultMap"
+'use client'
+
+import dynamic from 'next/dynamic'
 import ProgressBar from "./ProgressBar"
+
+// Dynamically import ResultMap to prevent SSR issues
+const ResultMap = dynamic(() => import('./ResultMap'), {
+    ssr: false,
+    loading: () => (
+        <div className="animate-pulse bg-gray-200 rounded-md" style={{width: 1000, height: 500}}>
+            <div className="flex items-center justify-center h-full text-gray-500">
+                Loading map...
+            </div>
+        </div>
+    )
+})
 
 interface ScoreProp {
     attainedScore: number,
