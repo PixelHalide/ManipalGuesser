@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 import "@theme-toggles/react/css/Expand.css"
 import ThemeProvider from "../Components/ThemeProvider";
@@ -18,6 +19,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col transition-all">
         <ThemeProvider>
           {children}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
