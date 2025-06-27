@@ -36,9 +36,17 @@ app.post('/calcScore', (req, res) => {
             submittedCords
         } = req.body
 
-    //const db = client.db(DB_NAME);
-    //const collection = db.collection("reactTravel");
-    //const time = Date.now()
+    const db = client.db(DB_NAME);
+    const collection = db.collection("userData");
+    const time = Date.now()
+
+    const ip =
+        req.headers['cf-connecting-ip'] ||
+        req.headers['x-real-ip'] ||
+        req.headers['x-forwarded-for'] ||
+        req.socket.remoteAddress || '';
+
+    await collection.insertOne({"ip": ip, "time": time});
 
     const imgPath = `./public/manipalPictures/${mapNumber}.jpg`
 
