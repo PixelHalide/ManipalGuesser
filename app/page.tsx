@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { gps } from "exifr";
 import ScoreScreen from '../Components/GuessScreen/ScoreScreen';
 import Map from '../Components/Map'
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Home = () => {
 
@@ -14,12 +14,17 @@ const Home = () => {
     const [mapHover, set_hover] = useState(false);
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
     const [guessSubmitted, set_submit] = useState(false);
-    const [mapNumber, set_map] = useState(Math.floor((Math.random() * 15) + 1));
+    const [mapNumber, set_map] = useState<number | null>(null);
 
     const imgPath = `/manipalPictures/${mapNumber}.jpg`
 
+    useEffect(() => {
+        set_map(Math.floor((Math.random() * 15) + 1));
+    }, []);
+
     // Extract EXIF GPS data from the test image on mount using exifr
     useEffect(() => {
+        if (!mapNumber) return;
         async function extractExif() {
             try {
                 const response = await fetch(imgPath);
@@ -85,19 +90,20 @@ const Home = () => {
         <div className='flex justify-center items-center min-h-screen max'>
 
             <div className='relative'>
-                <TransformWrapper>
-                    <TransformComponent>
-                        <Image
-                            src={imgPath}
-                            alt="Manipal location to guess"
-                            className='max-w-screen max-h-screen object-contain h-fit'
-                            width={1920}
-                            height={1080}
-                            priority
-                        />
-                    </TransformComponent>
-                </TransformWrapper>
-                {!guessSubmitted && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>
+                {mapNumber && (
+                    <TransformWrapper>
+                        <TransformComponent>
+                            <LazyLoadImage
+                                src={imgPath}
+                                alt="Manipal location to guess"
+                                className='max-w-screen max-h-screen object-contain h-fit'
+                                width={1920}
+                                height={1080}
+                            />
+                        </TransformComponent>
+                    </TransformWrapper>
+                )}
+                {!guessSubmitted && mapNumber && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>
                     <Map
                     height={mapHover ? 400 : 125}
                     width={mapHover ? 400 : 125}

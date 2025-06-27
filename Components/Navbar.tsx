@@ -1,8 +1,8 @@
-'use client'
-
 import { Expand } from "@theme-toggles/react"
+import Link from 'next/link'
 import dark_logo from '../public/logo.png'
 import logo from '../public/logo_black.png'
+import SignUpIn from "./SignUpIn"
 
 interface DarkModeProp {
     darkState: boolean,
@@ -22,14 +22,14 @@ const Navbar = ({switchTheme, darkState} : DarkModeProp) => {
             </div>
               <div className='flex flex-col md:flex-row justify-center items-center'>
                 <div className='hover:bg-gray-200 p-2 rounded-2xl transition duration-200 dark:hover:text-black'>
-                  <div className="py-1 px-4 rounded transition-all">
+                  <Link href="/" className="py-1 px-4 rounded transition-all">
                     Home
-                  </div>
+                  </Link>
                 </div>
                 <div className='hover:bg-gray-200 p-2 rounded-2xl transition duration-200 dark:hover:text-black'>
-                  <div className="py-1 px-4 rounded hover:text-gray-700 transition-all">
+                  <Link href="/leaderboard" className="py-1 px-4 rounded hover:text-gray-700 transition-all">
                     Leaderboard
-                  </div>
+                  </Link>
                 </div>
                 <div className='hover:bg-gray-200 p-2 rounded-2xl transition duration-200 dark:hover:text-black'>
                   <div className="py-1 px-4 rounded hover:text-gray-700 transition-all">
@@ -37,13 +37,16 @@ const Navbar = ({switchTheme, darkState} : DarkModeProp) => {
                   </div>
                 </div>
               </div>
-            <Expand
-              toggled={darkState}
-              toggle={switchTheme}
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-            />
+            <div className="flex flex-col md:flex-row">
+              <Expand
+                toggled={darkState}
+                toggle={switchTheme}
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              />
+              <SignUpIn />
+            </div>
         </nav>
     </div>
   )
