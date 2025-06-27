@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { gps } from "exifr";
 import ScoreScreen from '../Components/GuessScreen/ScoreScreen';
@@ -34,7 +35,7 @@ const Home = () => {
             }
         }
         extractExif();
-    }, [mapNumber]);
+    }, [mapNumber, imgPath]);
 
     const fetchCords = (cords: [number, number]) => {
         set_cords([cords[0],cords[1]]);
@@ -86,7 +87,14 @@ const Home = () => {
             <div className='relative'>
                 <TransformWrapper>
                     <TransformComponent>
-                        <img src={imgPath} className='max-w-screen max-h-screen object-contain h-fit'/>
+                        <Image
+                            src={imgPath}
+                            alt="Manipal location to guess"
+                            className='max-w-screen max-h-screen object-contain h-fit'
+                            width={1920}
+                            height={1080}
+                            priority
+                        />
                     </TransformComponent>
                 </TransformWrapper>
                 {!guessSubmitted && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>
@@ -102,7 +110,11 @@ const Home = () => {
                                 : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                         style={{ width: mapHover ? 400 : 125 }}
-                        onClick={() => {markerCords && submitGuess()}}
+                        onClick={() => {
+                            if (markerCords) {
+                                submitGuess();
+                            }
+                        }}
                         disabled={!markerCords}
                     >
                         Submit
