@@ -15,9 +15,9 @@ const Navbar = ({switchTheme, darkState} : DarkModeProp) => {
     <div className='sticky top-0 z-30 bg-[#EEEEEE] dark:bg-[#212121] dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2'>
         <nav className="flex flex-wrap flex-col md:flex-row justify-between items-center mb-2 pt-2 px-4 text-sm md:text-lg">
             <div>
-              <div className='flex flex-row'>
-                <img src={`${darkState ? dark_logo : logo}`} alt="Logo" className='w-10 h-10'/>
-                <p className='font-prompt font-extrabold text-2xl md:text-4xl mx-4'>ManipalGuessr</p>
+              <div className='flex flex-row items-center'>
+                <img src={`${darkState ? dark_logo : logo}`} alt="Logo" className='w-8 h-8'/>
+                <p className='font-prompt font-extrabold text-2xl md:text-4xl ml-3'>ManipalGuessr</p>
               </div>
             </div>
               <div className='flex flex-col md:flex-row justify-center items-center'>
@@ -37,7 +37,7 @@ const Navbar = ({switchTheme, darkState} : DarkModeProp) => {
                   </div>
                 </div>
               </div>
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-4">
               <Expand
                 toggled={darkState}
                 toggle={switchTheme}
@@ -45,7 +45,9 @@ const Navbar = ({switchTheme, darkState} : DarkModeProp) => {
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
               />
-              <SignUpIn />
+              <div className="mt-2 md:mt-0">
+                <SignUpIn />
+              </div>
             </div>
         </nav>
     </div>
