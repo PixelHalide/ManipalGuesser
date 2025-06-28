@@ -3,8 +3,13 @@
 import { useState, useEffect } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import ScoreScreen from '../Components/GuessScreen/ScoreScreen';
-import Map from '../Components/Map'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import dynamic from 'next/dynamic';
+
+// Dynamically import ResultMap to prevent SSR issues
+const Map = dynamic(() => import('../Components/Map'), {
+    ssr: false,
+});
 
 interface BackendReturn {
     points: number
