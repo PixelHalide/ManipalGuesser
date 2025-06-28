@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react';
+import 'leaflet/dist/leaflet.css';
 
 interface MapSizeProp {
     height : number,
@@ -18,16 +19,13 @@ const Map = ({height, width, setCords} : MapSizeProp) => {
     if (typeof window === 'undefined') return;
 
     const initializeMap = async () => {
-      // Dynamic import of Leaflet to prevent SSR issues
       const L = await import('leaflet');
 
-      // Import CSS
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
       document.head.appendChild(link);
 
-      // Import marker images
       const iconRetinaUrl = (await import('leaflet/dist/images/marker-icon-2x.png')).default;
       const iconUrl = (await import('leaflet/dist/images/marker-icon.png')).default;
       const shadowUrl = (await import('leaflet/dist/images/marker-shadow.png')).default;
