@@ -1,19 +1,20 @@
 'use client'
 
 import { useEffect, useRef } from 'react';
-import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet'
 
-import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
-import iconUrl from 'leaflet/dist/images/marker-icon.png';
-import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+// Public assets for Leaflet marker icons
+const ICON_RETINA_URL = '/marker-icon-2x.png';
+const ICON_URL = '/marker-icon.png';
+const SHADOW_URL = '/marker-shadow.png';
 
 // ← override the default icon URLs
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl,
-  iconUrl,
-  shadowUrl
+  iconRetinaUrl: ICON_RETINA_URL,
+  iconUrl: ICON_URL,
+  shadowUrl: SHADOW_URL
 });
 
 interface MapSizeProp {
@@ -24,37 +25,45 @@ interface MapSizeProp {
 
 const Map = ({height, width, setCords} : MapSizeProp) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const mapInstance = useRef<L.Map | null>(null);
-  const currentMarker = useRef<L.Marker | null>(null);
+  const mapInstance = useRef<any>(null);
+  const currentMarker = useRef<any>(null);
 
   useEffect(() => {
-    if (mapContainer.current && !mapInstance.current) {
-      const mapOptions = {
-        center: [13.3525, 74.7928] as [number, number],
-        zoom: 15,
-        zoomControl: false
-      };
+    // Only initialize Leaflet on client side
+    if (typeof window === 'undefined') return;
 
-      mapInstance.current = L.map(mapContainer.current, mapOptions);
+    const initializeMap = async () => {
 
-      const layer = new L.TileLayer(
-        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      );
-      mapInstance.current.addLayer(layer);
+      if (mapContainer.current && !mapInstance.current) {
+        const mapOptions = {
+          center: [13.3525, 74.7928] as [number, number],
+          zoom: 15,
+          zoomControl: false
+        };
 
-      mapInstance.current.on('click', (e) => {
-        // Remove existing marker if it exists
-        if (currentMarker.current) {
-          currentMarker.current.removeFrom(mapInstance.current!);
-        }
+        mapInstance.current = L.map(mapContainer.current, mapOptions);
 
-        const marker = L.marker([e.latlng.lat, e.latlng.lng]);
-        marker.addTo(mapInstance.current!);
+        const layer = new L.TileLayer(
+          'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        );
+        mapInstance.current.addLayer(layer);
 
-        currentMarker.current = marker;
-        setCords([e.latlng.lat, e.latlng.lng]);
-      });
-    }
+        mapInstance.current.on('click', (e: any) => {
+          // Remove existing marker if it exists
+          if (currentMarker.current) {
+            currentMarker.current.removeFrom(mapInstance.current!);
+          }
+
+          const marker = L.marker([e.latlng.lat, e.latlng.lng]);
+          marker.addTo(mapInstance.current!);
+
+          currentMarker.current = marker;
+          setCords([e.latlng.lat, e.latlng.lng]);
+        });
+      }
+    };
+
+    initializeMap();
 
     return () => {
       if (mapInstance.current) {
