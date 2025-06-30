@@ -3,6 +3,7 @@ import cors from 'cors';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
 import pkg from 'exifr';
+import { v4 as uuidv4 } from 'uuid';
 const { gps } = pkg;
 
 dotenv.config()
@@ -99,6 +100,41 @@ app.post('/calcScore', (req, res) => {
   }
     })();
 });
+
+app.post('/signUp', (req, res) => {
+    (async () => {
+    try {
+        const {
+            userName,
+            userImage,
+            userEmail
+        } = req.body
+
+    const db = client.db(DB_NAME);
+    const collection = db.collection("userData");
+    let user = await collection.findOne({ "userEmail": userEmail });
+
+    if (!user){
+      const time = new Date().toISOString()
+      const UUID = uuidv4();
+
+      await collection.insertOne({"userID":UUID,
+                                  "userName":userName,
+                                  "userEmail":userEmail,
+                                  "userImage":userImage,
+                                  "weeklyPoints":0,
+                                  "totalPoints":0,
+                                  "signedUpAt":time
+                                });
+                            }
+    res.status(200).send("Success");
+} catch (error){
+    console.log(error);
+    return res.status(500).send({ error: "Error generating response" });
+  }
+    })();
+});
+
 
 // Start server
 async function startServer() {
