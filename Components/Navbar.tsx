@@ -64,8 +64,7 @@ const Navbar = ({ session }: NavbarProps) => {
                         onPointerLeaveCapture={undefined}
                     />
                     <div className="mt-2 md:mt-0">
-                        {/* @ts-ignore */}
-                        {!session ? <SignUpIn /> : <UserIcon session={session} />}
+                        {!session?.user ? <SignUpIn /> : <UserIcon session={session} />}
                     </div>
                 </div>
             </nav>
