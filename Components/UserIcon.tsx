@@ -1,27 +1,21 @@
 'use client'
 
-interface User {
-  name: string;
-  email: string;
-  image: string;
-}
-
-interface Session {
-  user: User;
-  expires: string;
-}
+import { Session } from "next-auth"
 
 interface SessionProp {
   session: Session;
 }
 
 const UserIcon = ({ session }: SessionProp ) => {
+  if (!session?.user) {
+    return null;
+  }
 
   return (
     <div>
         <div className="p-2">
             <img
-            src={session.user.image}
+            src={session.user.image ?? "/default-user-icon.png"}
             alt="User Icon"
             className="w-10 h-10 rounded-full object-cover"
             >
