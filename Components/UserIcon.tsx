@@ -2,6 +2,7 @@
 
 import { Session } from "next-auth"
 
+import Link from 'next/link'
 interface SessionProp {
   session: Session;
 }
@@ -12,16 +13,14 @@ const UserIcon = ({ session }: SessionProp ) => {
   }
 
   return (
-    <div>
-        <div className="p-2">
+         <Link href={"/userpage"} className="">
             <img
             src={session.user.image ?? "/default-user-icon.png"}
             alt="User Icon"
             className="w-10 h-10 rounded-full object-cover"
             >
             </img>
-        </div>
-    </div>
+        </Link>
   )
 }
 
