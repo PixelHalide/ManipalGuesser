@@ -6,6 +6,18 @@ import pkg from 'exifr';
 import { v4 as uuidv4 } from 'uuid';
 const { gps } = pkg;
 
+interface SignUpRequestBody {
+    userName: string;
+    userImage: string;
+    userEmail: string;
+    isNewUser?: boolean;
+}
+
+interface CalcScoreRequestBody {
+    mapNumber: number;
+    submittedCords: [number, number];
+}
+
 dotenv.config()
 
 const app = express();
@@ -29,13 +41,13 @@ app.get('/', (req, res) => {
   res.status(200).send("API is Up");
 });
 
-app.post('/calcScore', (req, res) => {
+app.post('/calcScore', (req, res: express.Response) => {
     (async () => {
     try {
         const {
             mapNumber,
             submittedCords
-        } = req.body
+        }: CalcScoreRequestBody = req.body
 
     const db = client.db(DB_NAME);
     const collection = db.collection("userData");
@@ -101,20 +113,21 @@ app.post('/calcScore', (req, res) => {
     })();
 });
 
-app.post('/signUp', (req, res) => {
+app.post('/signUp', (req, res: express.Response) => {
     (async () => {
     try {
         const {
             userName,
             userImage,
-            userEmail
-        } = req.body
+            userEmail,
+            isNewUser
+        }: SignUpRequestBody = req.body
 
-    const db = client.db(DB_NAME);
-    const collection = db.collection("userData");
-    let user = await collection.findOne({ "userEmail": userEmail });
 
-    if (!user){
+    if (isNewUser){
+
+      const db = client.db(DB_NAME);
+      const collection = db.collection("userData");
       const time = new Date().toISOString()
       const UUID = uuidv4();
 

@@ -17,7 +17,7 @@ const UserIcon = ({ session }: SessionProp ) => {
             <img
             src={session.user.image ?? "/default-user-icon.png"}
             alt="User Icon"
-            className="w-10 h-10 rounded-full object-cover"
+            className="w-10 h-10 rounded-full object-cover hover:scale-110 transition-all duration-200"
             >
             </img>
         </Link>
