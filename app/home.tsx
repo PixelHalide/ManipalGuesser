@@ -54,7 +54,8 @@ const Home = () => {
       console.log('no marker coordinates selected.');
       return;
     }
-    const response = await fetch("https://538f-13-233-131-89.ngrok-free.app/calcScore", {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await fetch(`${baseUrl}/calcScore`, {
         method:"POST",
         headers: {'Content-Type': 'application/json', },
         body: JSON.stringify({"mapNumber":mapNumber,"submittedCords":markerCords, "userID": session?.user?.id || null}),

@@ -142,6 +142,44 @@ app.post('/signUp', (req, res) => {
 });
 
 
+app.post('/form', (req, res) => {
+    (async () => {
+        try {
+            const {
+                name,
+                message
+            } = req.body
+
+            if (
+                typeof message !== 'string' ||
+                message.length === 0 ||
+                message.length > 400 || // Limit length
+                /[$<>]/.test(message)    // Prevent some special characters
+            ) {
+                return res.status(400).send({ error: "Invalid message input" });
+            }
+
+            const db = client.db(DB_NAME);
+            const collection = db.collection("feedback");
+            const time = Date.now()
+
+            const docToInsert = {
+                "time": time,
+                "name": name,
+                "message": message
+            }
+
+            await collection.insertOne(docToInsert);
+
+            res.status(200).send({ success: true });
+        } catch (error) {
+            console.log("Invalid Input");
+            return res.status(500).send({ error: "Error generating response" });
+        }
+    })();
+});
+
+
 // Start server
 async function startServer() {
   await client.connect();

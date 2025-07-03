@@ -7,7 +7,7 @@ const page = async () => {
     if (session && session.user) {
         const user = session.user;
         try {
-            const baseUrl = 'http://https://538f-13-233-131-89.ngrok-free.app';
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL
             const response = await fetch(`${baseUrl}/signUp`, {
                 method: 'POST',
                 headers: {
