@@ -57,7 +57,7 @@ const Home = () => {
     const response = await fetch("https://538f-13-233-131-89.ngrok-free.app/calcScore", {
         method:"POST",
         headers: {'Content-Type': 'application/json', },
-        body: JSON.stringify({"mapNumber":mapNumber,"submittedCords":markerCords}),
+        body: JSON.stringify({"mapNumber":mapNumber,"submittedCords":markerCords, "userID": session?.user?.id || null}),
     })
     if (!response.ok) {
         const errorData = await response.json();
@@ -82,7 +82,7 @@ const Home = () => {
             onNextGame={resetGame}
             distanceFromActualLocation={guessDistance}
             />}
-        <div className='flex justify-center items-center min-h-screen max'>
+        <div className='flex justify-center items-center h-screen overflow-hidden'>
             <div className='relative'>
                 {mapNumber && (
                     <TransformWrapper>
@@ -90,7 +90,7 @@ const Home = () => {
                             <LazyLoadImage
                                 src={imgPath}
                                 alt="Manipal location to guess"
-                                className='max-h-screen object-contain h-fit'
+                                className='max-h-screen object-contain'
                                 width={1920}
                                 height={1080}
                             />

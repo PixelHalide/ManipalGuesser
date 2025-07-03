@@ -8,6 +8,7 @@ const { gps } = pkg;
 interface CalcScoreRequestBody {
     mapNumber: number;
     submittedCords: [number, number];
+    userID: string | null;
 }
 
 dotenv.config()
@@ -38,7 +39,8 @@ app.post('/calcScore', (req, res: express.Response) => {
     try {
         const {
             mapNumber,
-            submittedCords
+            submittedCords,
+            userID
         }: CalcScoreRequestBody = req.body
 
     const imgPath = `./public/manipalPictures/${mapNumber}.jpg`
@@ -81,9 +83,21 @@ app.post('/calcScore', (req, res: express.Response) => {
     Fo a perfect guess, 5k points are awarded.
     */
    if (points < 0) points = 0;
-    console.log(points);
 
+   if (userID) {
+        const db = client.db(DB_NAME);
+        const collection = db.collection("userData");
+        const user = await collection.findOne({ "userID": userID });
 
+        if (user) {
+            await collection.updateOne(
+                { "userID": userID },
+                { $inc: { "weeklyPoints": points, "totalPoints": points } }
+            );
+        } else {
+            console.log(`User with ID ${userID} not found.`);
+        }
+    }
     res.status(200).send({points, imageCords, distanceInMeters});
 
 } catch (error){
