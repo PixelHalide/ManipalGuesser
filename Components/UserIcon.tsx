@@ -1,17 +1,13 @@
 'use client'
 
-import { Session } from "next-auth"
-
+import { useSession } from "next-auth/react";
 import Link from 'next/link'
-interface SessionProp {
-  session: Session;
-}
 
-const UserIcon = ({ session }: SessionProp ) => {
+const UserIcon = () => {
+  const { data: session } = useSession();
   if (!session?.user) {
     return null;
   }
-
   return (
          <Link href={"/userpage"} className="">
             <img
