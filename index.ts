@@ -141,7 +141,6 @@ app.post('/signUp', (req, res) => {
     })();
 });
 
-
 app.post('/form', (req, res) => {
     (async () => {
         try {
@@ -178,6 +177,38 @@ app.post('/form', (req, res) => {
         }
     })();
 });
+
+
+app.get('/leaderboard/:category/:page', (req, res) => {
+    (async () => {
+        try {
+            const page = parseInt(req.params.page) || 1;
+            const category = req.params.category;
+            const limit = 10;
+            const skip = (page - 1) * limit;
+
+            const db = client.db(DB_NAME);
+            const collection = db.collection("userData");
+
+            if (category !== "weekly" && category !== "total") {
+                return res.status(400).send({ error: "Invalid category" });
+            }
+
+            const leaderboard = await collection.find({})
+                .sort({ "totalPoints": -1 })
+                .project({ "name": 1, ...(category === "weekly" ? { "weeklyPoints": 1 } : { "totalPoints": 1 }) })
+                .skip(skip)
+                .limit(limit)
+                .toArray();
+
+            res.status(200).send({ leaderboard });
+        } catch (error) {
+            console.log("Invalid Input");
+            return res.status(500).send({ error: "Error generating response" });
+        }
+    })();
+});
+
 
 
 // Start server
