@@ -2,8 +2,17 @@
 
 import { useState } from "react";
 
+interface FormResult {
+    success: boolean;
+    message?: string;
+    data?: {
+        name: string;
+        message: string;
+    };
+}
+
 interface FormProps {
-    onSubmit?: (result: any) => void;
+    onSubmit?: (result: FormResult) => void;
 }
 
 function Form ({onSubmit}: FormProps) {
