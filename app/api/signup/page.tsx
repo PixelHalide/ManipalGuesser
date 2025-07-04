@@ -18,6 +18,8 @@ const page = async () => {
                     userEmail: user.email,
                     userImage: user.image,
                     userID: user.id,
+                    globalName: user.global_name,
+                    discordUser: user.username
                 }),
             });
 

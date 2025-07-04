@@ -114,7 +114,9 @@ app.post('/signUp', (req, res) => {
             userName,
             userImage,
             userEmail,
-            userID
+            userID,
+            globalName,
+            discordUser
         } = req.body
 
     const db = client.db(DB_NAME);
@@ -128,6 +130,8 @@ app.post('/signUp', (req, res) => {
                                   "userName":userName,
                                   "userEmail":userEmail,
                                   "userImage":userImage,
+                                  "globalName":globalName,
+                                  "discordUser":discordUser,
                                   "weeklyPoints":0,
                                   "totalPoints":0,
                                   "signedUpAt":time
