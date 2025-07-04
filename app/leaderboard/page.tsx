@@ -12,7 +12,7 @@ interface LeaderboardData {
 
 const page = async () => {
 
-  let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/total/0`, {
+  const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/total/0`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -20,6 +20,12 @@ const page = async () => {
   });
 
   let leaderboardData: LeaderboardData[] = [];
+
+  if (data.ok) {
+    leaderboardData = await data.json();
+  }
+
+  console.log(leaderboardData);
   return (
     <div>
 
