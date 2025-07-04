@@ -2,16 +2,18 @@
 
 import Form from "./form";
 
-interface FormProps {
-    data:{
+interface FormResult {
+    success: boolean;
+    message?: string;
+    data?: {
         name: string;
         message: string;
-    }
+    };
 }
 
 function Contact() {
-  const handleFormSubmit = (data: FormProps) => {
-    console.log('Form submitted:', data);
+  const handleFormSubmit = (result: FormResult) => {
+    console.log('Form submitted:', result);
     alert(`Thanks, we'll get back to you soon`);
   };
 
