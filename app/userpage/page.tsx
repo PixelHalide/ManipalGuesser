@@ -19,7 +19,9 @@ const UserPage = async () => {
             <Image
             src={session.user.image ?? "/default-user-icon.png"}
             alt="User Icon"
-            className="w-30 h-30 rounded-full object-cover"
+            width={120}
+            height={120}
+            className="rounded-full object-cover"
             >
             </Image>
         </div>
