@@ -19,7 +19,7 @@ const Navbar = () => {
     useEffect(() => {
         if (darkMode) {
             document.documentElement.classList.add('dark')
-            document.body.style.backgroundColor = '#1a1a1a'
+            document.body.style.backgroundColor = '#000000'
         } else {
             document.documentElement.classList.remove('dark')
             document.body.style.backgroundColor = '#e5e7eb'
@@ -52,7 +52,7 @@ const Navbar = () => {
                         </Link>
                     </div>
                     <div className='p-2'>
-                        <Link href="/leaderboard/0" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
+                        <Link href="/leaderboard" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
                             Leaderboard
                         </Link>
                     </div>
