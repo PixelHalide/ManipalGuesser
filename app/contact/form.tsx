@@ -2,8 +2,17 @@
 
 import { useState } from "react";
 
+interface FormResult {
+    success: boolean;
+    message?: string;
+    data?: {
+        name: string;
+        message: string;
+    };
+}
+
 interface FormProps {
-    onSubmit?: (result: any) => void;
+    onSubmit?: (result: FormResult) => void;
 }
 
 function Form ({onSubmit}: FormProps) {
@@ -31,7 +40,7 @@ function Form ({onSubmit}: FormProps) {
                 throw new Error(errorData.message || 'Something went wrong on the server.');
             }
 
-            const result = await response.json();
+            const result: FormResult = await response.json();
 
             if (onSubmit) {
                 onSubmit(result);
