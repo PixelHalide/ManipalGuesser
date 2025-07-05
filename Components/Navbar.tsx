@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Expand } from "@theme-toggles/react"
-import { Session } from "next-auth"
-import { SessionProvider } from 'next-auth/react'
+import { SessionProvider, useSession } from 'next-auth/react'
 import UserIcon from './UserIcon'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,12 +10,11 @@ import dark_logo from '../public/logo.png'
 import logo from '../public/logo_black.png'
 import SignUpIn from "./SignUpIn"
 
-interface NavbarProps {
-    session: Session | null
-}
 
-const Navbar = ({ session }: NavbarProps) => {
+const Navbar = () => {
+
     const [darkMode, setDarkMode] = useState(true);
+    const { data: session } = useSession();
 
     useEffect(() => {
         if (darkMode) {
