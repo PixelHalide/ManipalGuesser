@@ -89,10 +89,29 @@ app.post('/calcScore', (req, res: express.Response) => {
         const collection = db.collection("userData");
         const user = await collection.findOne({ "userID": userID });
 
+
         if (user) {
+            const newGamesPlayed = user.gamesPlayed + 1;
+            const newGamesPlayedWeekly = user.gamesPlayedWeekly + 1;
+            const newTotalPoints = user.totalPoints + points;
+            const newWeeklyPoints = user.weeklyPoints + points;
+            const averagePoints = newTotalPoints / newGamesPlayed;
+            const averagePointsWeekly = newWeeklyPoints / newGamesPlayedWeekly;
+
             await collection.updateOne(
                 { "userID": userID },
-                { $inc: { "weeklyPoints": points, "totalPoints": points } }
+                {
+                  $inc: {
+                    "weeklyPoints": points,
+                    "totalPoints": points,
+                    "gamesPlayed": 1,
+                    "gamesPlayedWeekly": 1
+                  },
+                  $set: {
+                    "averagePoints": averagePoints,
+                    "averagePointsWeekly": averagePointsWeekly
+                  }
+                }
             );
         } else {
             console.log(`User with ID ${userID} not found.`);
@@ -134,6 +153,10 @@ app.post('/signUp', (req, res) => {
                                   "discordUser":discordUser,
                                   "weeklyPoints":0,
                                   "totalPoints":0,
+                                  "gamesPlayed":0,
+                                  "gamesPlayedWeekly":0,
+                                  "averagePoints":0,
+                                  "averagePointsWeekly":0,
                                   "signedUpAt":time
                                 });
                             }
@@ -198,9 +221,18 @@ app.get('/leaderboard/:category/:page', (req, res) => {
                 return res.status(400).send({ error: "Invalid category" });
             }
 
+            const sortField = category === "weekly" ? "weeklyPoints" : "totalPoints";
             const leaderboard = await collection.find({})
-                .sort({ "totalPoints": -1 })
-                .project({ "name": 1, ...(category === "weekly" ? { "weeklyPoints": 1 } : { "totalPoints": 1 }) })
+                .sort({ [sortField]: -1 })
+                .project({
+                    "userID": 1,
+                    "userName": 1,
+                    "userEmail": 1,
+                    "userImage": 1,
+                    "weeklyPoints": 1,
+                    "totalPoints": 1,
+                    "discordUser": 1
+                })
                 .skip(skip)
                 .limit(limit)
                 .toArray();
