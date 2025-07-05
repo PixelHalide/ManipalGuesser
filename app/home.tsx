@@ -83,7 +83,7 @@ const Home = () => {
             onNextGame={resetGame}
             distanceFromActualLocation={guessDistance}
             />}
-        <div className='flex justify-center items-center h-screen overflow-hidden'>
+        <div className='flex justify-center items-center max-h-screen overflow-hidden'>
             <div className='relative'>
                 {mapNumber && (
                     <TransformWrapper>
@@ -91,7 +91,7 @@ const Home = () => {
                             <LazyLoadImage
                                 src={imgPath}
                                 alt="Manipal location to guess"
-                                className='max-h-screen object-contain'
+                                className='max-h-[93vh] object-contain'
                                 width={1920}
                                 height={1080}
                             />
