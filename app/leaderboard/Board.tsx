@@ -24,10 +24,9 @@ interface PageSelectProps {
   setPageNumber(page: number): void;
   setSelected(type: 'total' | 'weekly'): void;
   pageNumber: number;
-  setLeaderboardType(type: 'total' | 'weekly'): void;
 }
 
-const Board = ({ leaderboardData, totalPlayers, leaderboardType, setPageNumber, setSelected, pageNumber, setLeaderboardType }: PageSelectProps ) => {
+const Board = ({ leaderboardData, totalPlayers, leaderboardType, setPageNumber, setSelected, pageNumber }: PageSelectProps ) => {
 
 
   const getRankIcon = (index: number) => {

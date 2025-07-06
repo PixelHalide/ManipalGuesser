@@ -17,7 +17,7 @@ interface LeaderboardData {
   gamesPlayedWeekly: number;
 }
 
-const page = () => {
+const Page = () => {
 
   const [selectedPage, setSelectedPage] = useState(1)
   const [leaderboardType, setLeaderboardType] = useState<'total' | 'weekly'>('total')
@@ -60,11 +60,10 @@ const page = () => {
             setPageNumber={setSelectedPage}
             setSelected={setLeaderboardType}
             pageNumber={selectedPage}
-            setLeaderboardType={setLeaderboardType}
         />
       )}
     </div>
   )
 }
 
-export default page
+export default Page
