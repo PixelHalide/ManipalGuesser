@@ -1,6 +1,7 @@
 'use client'
 
 import { useSession } from "next-auth/react";
+import Image  from "next/image";
 import Link from 'next/link'
 
 const UserIcon = () => {
@@ -10,12 +11,13 @@ const UserIcon = () => {
   }
   return (
          <Link href={"/userpage"} className="">
-            <img
+            <Image
+            width={40}
+            height={40}
             src={session.user.image ?? "/default-user-icon.png"}
             alt="User Icon"
-            className="w-10 h-10 rounded-full object-cover hover:scale-110 transition-all duration-200"
-            >
-            </img>
+            className=" rounded-full object-cover hover:scale-110 transition-all duration-200"
+            />
         </Link>
   )
 }

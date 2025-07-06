@@ -1,5 +1,6 @@
 'use client';
 
+import Image from "next/image";
 import { Trophy, Medal, Award } from "lucide-react";
 import BoardSelect from "./BoardSelect";
 import PageSelect from './PageSelect';
@@ -91,10 +92,12 @@ const Board = ({ leaderboardData, totalPlayers, leaderboardType, setPageNumber, 
                     </td>
                     <td className="p-4">
                       <div className="flex items-center space-x-3">
-                        <img
+                        <Image
+                          width={40}
+                          height={40}
                           src={player.userImage}
                           alt={player.userName}
-                          className="w-10 h-10 rounded-full"
+                          className="rounded-full"
                         />
                         <div className="flex flex-col">
                           <h3 className="font-medium text-neutral-200">{player.userName}</h3>
