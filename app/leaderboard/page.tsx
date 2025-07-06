@@ -10,7 +10,7 @@ interface LeaderboardData {
   averagePoints: number;
   averagePointsWeekly: number;
   gamesPlayed: number;
-  gamesPlayedWeekly?: number;
+  gamesPlayedWeekly: number;
 }
 
 const page = async () => {

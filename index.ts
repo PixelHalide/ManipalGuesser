@@ -231,7 +231,11 @@ app.get('/leaderboard/:category/:page', (req, res) => {
                     "userImage": 1,
                     "weeklyPoints": 1,
                     "totalPoints": 1,
-                    "discordUser": 1
+                    "discordUser": 1,
+                    "averagePoints": 1,
+                    "averagePointsWeekly": 1,
+                    "gamesPlayed": 1,
+                    "gamesPlayedWeekly": 1
                 })
                 .skip(skip)
                 .limit(limit)

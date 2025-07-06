@@ -1,8 +1,6 @@
 'use client';
 
-import { useState } from 'react';
 import Board from "./Board";
-import BoardSelect from "./BoardSelect";
 
 interface LeaderboardData {
   userID: string;
@@ -14,7 +12,7 @@ interface LeaderboardData {
   averagePoints: number;
   averagePointsWeekly: number;
   gamesPlayed: number;
-  gamesPlayedWeekly?: number;
+  gamesPlayedWeekly: number;
 }
 
 const PageContainer = ({leaderboardData}: {leaderboardData: LeaderboardData[]}) => {
