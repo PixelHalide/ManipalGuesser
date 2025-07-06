@@ -35,13 +35,13 @@ const ScoreScreen = ({ attainedScore, clickedLocation, actualLocation, distanceF
             targetProgress={((attainedScore*100)/5000)}
             intervalTime={20}
             />
-            <div className="grid grid-cols-3 items-center">
-              <div></div>
+            <div className="flex flex-col md:grid md:grid-cols-3 items-center gap-4">
+              <div className="hidden md:block"></div>
               <div className='flex flex-col items-center'>
                 <p className="text-center dark:text-neutral-200">Score: {attainedScore.toFixed(0)}</p>
                 <p className="text-center dark:text-neutral-200">Distance: {distanceFromActualLocation.toFixed(2)} meters</p>
               </div>
-              <button onClick={onNextGame} className="inline-flex h-10 md:h-12 items-center justify-center rounded-md bg-neutral-950 dark:bg-neutral-200 px-4 md:px-6 font-medium text-neutral-50 dark:text-neutral-700 transition active:scale-110 cursor-pointer justify-self-end">Next Game</button>
+              <button onClick={onNextGame} className="inline-flex h-10 md:h-12 items-center justify-center rounded-md bg-neutral-950 dark:bg-neutral-200 px-4 md:px-6 font-medium text-neutral-50 dark:text-neutral-700 transition active:scale-110 cursor-pointer md:justify-self-end">Next Game</button>
             </div>
         </div>
     </div>
