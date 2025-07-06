@@ -1,11 +1,14 @@
 import BoardSelect from "./BoardSelectSkeleton"
 import SkeletonBody from "./SkeletonBody";
+import PageSelectSkeleton from "./PageSelectSkeleton";
 
 interface LoadingProps {
   isSelected: 'total' | 'weekly';
+  playerCount: number;
+  selectedPage: number;
 }
 
-const BoardSkeleton = ({ isSelected }: LoadingProps) => {
+const BoardSkeleton = ({ isSelected, playerCount, selectedPage }: LoadingProps) => {
 
   return (
       <div className="container mx-auto px-4 py-8">
@@ -32,6 +35,7 @@ const BoardSkeleton = ({ isSelected }: LoadingProps) => {
               </tbody>
             </table>
           </div>
+          <PageSelectSkeleton currentPage={selectedPage} totalPlayers={playerCount} />
         </div>
     </div>
   )

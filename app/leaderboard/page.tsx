@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Board from "./Board";
-import Loading from './SkeletonComps/BoardSkeleton'
+import BoardSkeleton from './SkeletonComps/BoardSkeleton'
 
 interface LeaderboardData {
   userID: string;
@@ -47,7 +47,12 @@ const page = () => {
   console.log(leaderboardData)
   return (
     <div className="container mx-auto px-4 py-8">
-      {loading ? <Loading isSelected={leaderboardType} /> : (
+      {loading
+        ? <BoardSkeleton
+        isSelected={leaderboardType}
+        playerCount={playerCount}
+        selectedPage={selectedPage} />
+        : (
         <Board
             leaderboardData={leaderboardData}
             totalPlayers={playerCount}
