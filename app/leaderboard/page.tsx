@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Board from "./Board";
+import Loading from './SkeletonComps/BoardSkeleton'
 
 interface LeaderboardData {
   userID: string;
@@ -22,9 +23,11 @@ const page = () => {
   const [leaderboardType, setLeaderboardType] = useState<'total' | 'weekly'>('total')
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([])
   const [playerCount, setPlayerCount] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/${leaderboardType}/${selectedPage}`, {
         "method": "GET",
         headers: {
@@ -37,12 +40,14 @@ const page = () => {
         setLeaderboardData(response.leaderboard)
         setPlayerCount(response.totalPlayers)
       }
+      setLoading(false)
     }
     fetchData()
   }, [selectedPage, leaderboardType])
   console.log(leaderboardData)
   return (
     <div className="container mx-auto px-4 py-8">
+      {loading ? <Loading isSelected={leaderboardType} /> : (
         <Board
             leaderboardData={leaderboardData}
             totalPlayers={playerCount}
@@ -52,6 +57,7 @@ const page = () => {
             pageNumber={selectedPage}
             setLeaderboardType={setLeaderboardType}
         />
+      )}
     </div>
   )
 }

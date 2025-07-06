@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { ArrowLeft, Trophy, Medal, Award, User, ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
+import { Trophy, Medal, Award } from "lucide-react";
 import BoardSelect from "./BoardSelect";
 import PageSelect from './PageSelect';
 
@@ -26,28 +25,31 @@ interface PageSelectProps {
   setSelected(type: 'total' | 'weekly'): void;
   pageNumber: number;
   setLeaderboardType(type: 'total' | 'weekly'): void;
-
 }
 
 const Board = ({ leaderboardData, totalPlayers, leaderboardType, setPageNumber, setSelected, pageNumber, setLeaderboardType }: PageSelectProps ) => {
 
 
   const getRankIcon = (index: number) => {
-    if (index === 0) {
-      return <Trophy className="w-4 h-4 text-yellow-400" />;
-    } else if (index === 1) {
-      return <Medal className="w-4 h-4 text-gray-300" />;
-    } else if (index === 2) {
-      return <Award className="w-4 h-4 text-amber-600" />;
-    } else {
-      return <span className="text-gray-500">{index + 1}</span>;
-    }
+    if (pageNumber === 1){
+      if (index === 0) {
+        return <Trophy className="w-4 h-4 text-yellow-400" />;
+      } else if (index === 1) {
+        return <Medal className="w-4 h-4 text-gray-300" />;
+      } else if (index === 2) {
+        return <Award className="w-4 h-4 text-amber-600" />;
+      }}
+    let rank = index;
+    if (pageNumber > 1) {rank += (pageNumber - 1) * 10;}
+    return <span className="text-neutral-200">{rank + 1}</span>;
   };
 
   const getBackgroundColor = (index: number) => {
-    if (index === 0) return "bg-gradient-to-r from-yellow-500/10 to-yellow-400/5 border-yellow-400/20";
-    if (index === 1) return "bg-gradient-to-r from-neutral-100/10 to-gray-400/5 border-gray-400/20";
-    if (index === 2) return "bg-gradient-to-r from-amber-600/10 to-amber-500/5 border-amber-500/20";
+    if (pageNumber === 1) {
+      if (index === 0) return "bg-gradient-to-r from-yellow-500/10 to-yellow-400/5 border-yellow-400/20";
+      if (index === 1) return "bg-gradient-to-r from-neutral-100/10 to-gray-400/5 border-gray-400/20";
+      if (index === 2) return "bg-gradient-to-r from-amber-600/10 to-amber-500/5 border-amber-500/20";
+    }
     return "bg-gray-900/50 border-gray-800/50";
   }
 
