@@ -1,8 +1,8 @@
 'use client'
 
 interface BoardSelectProps {
-  onSelect: (type: 'overall' | 'weekly') => void;
-  isSelected: 'overall' | 'weekly';
+  onSelect: (type: 'total' | 'weekly') => void;
+  isSelected: 'total' | 'weekly';
 }
 const BoardSelect = ({ onSelect, isSelected }: BoardSelectProps) => {
 
@@ -10,11 +10,11 @@ const BoardSelect = ({ onSelect, isSelected }: BoardSelectProps) => {
   <div className='py-3 px-5 bg-gray-800/50 rounded-lg flex gap-2 w-fit mb-8 text-sm mx-auto transition-all duration-300'>
     <button
       className={`py-2 px-4 rounded cursor-pointer ${
-        isSelected === 'overall'
+        isSelected === 'total'
           ? 'bg-blue-400/20 text-blue-400 border border-blue-400/60'
           : 'text-neutral-300 hover:text-neutral-50'
       }`}
-      onClick={() => onSelect('overall')}
+      onClick={() => onSelect('total')}
     >
       Overall
     </button>

@@ -222,7 +222,7 @@ app.get('/leaderboard/:category/:page', (req, res) => {
             }
 
             const sortField = category === "weekly" ? "weeklyPoints" : "totalPoints";
-            const leaderboard = await collection.find({})
+            const leaderboard = await collection.find({sortField: { "$gt": 0 } })
                 .sort({ [sortField]: -1 })
                 .project({
                     "userID": 1,
@@ -241,7 +241,9 @@ app.get('/leaderboard/:category/:page', (req, res) => {
                 .limit(limit)
                 .toArray();
 
-            res.status(200).send({ leaderboard });
+            const totalPlayers = await collection.countDocuments({ [sortField]: { "$gt": 0 } });
+
+            res.status(200).send({ leaderboard, totalPlayers });
         } catch (error) {
             console.log("Invalid Input");
             return res.status(500).send({ error: "Error generating response" });
