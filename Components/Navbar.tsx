@@ -31,8 +31,8 @@ const Navbar = () => {
     }
 
     return (
-        <div className={`sticky top-0 z-30 bg-gray-200 dark:bg-neutral-900 dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2 transition-all`}>
-            <nav className="flex flex-wrap flex-col md:flex-row justify-between items-center mb-2 pt-2 px-4 text-sm md:text-lg">
+        <div className={`absolute top-0 z-30 bg-gray-200 dark:bg-neutral-900 dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2 transition-all w-screen`}>
+            <nav className="flex flex-wrap md:flex-row justify-between items-center mb-2 pt-2 px-4 text-sm md:text-lg">
                 <div>
                     <div className='flex flex-row items-center'>
                         <Image

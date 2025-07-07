@@ -72,7 +72,7 @@ const Board = ({ leaderboardData, totalPlayers, leaderboardType, setPageNumber, 
           isSelected={leaderboardType}
         />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gray-900/80 rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-gray-900/80 rounded-lg shadow-lg overflow-scroll">
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-blue-500 to-purple-600 text-neutral-200">

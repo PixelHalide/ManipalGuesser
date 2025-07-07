@@ -79,7 +79,7 @@ const Map = ({height, width, setCords} : MapSizeProp) => {
     }
   }, [height, width]);
 
-  return <div ref={mapContainer} style={{height, width}} className='transiton-all rounded-md'></div>
+  return <div ref={mapContainer} style={{height: `${height}rem`, width: `${width}rem`}} className='transiton-all rounded-md'></div>
 
 };
 
