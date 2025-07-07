@@ -96,7 +96,7 @@ const Home = () => {
   }
 
   return (
-    <div className="h-screen w-screen bg-black">
+    <div className="h-screen w-screen bg-black overflow-hidden">
         {guessSubmitted && markerCords && imageCords && <ScoreScreen
             attainedScore={points}
             clickedLocation={markerCords}
@@ -130,7 +130,7 @@ const Home = () => {
                         </TransformComponent>
                     </TransformWrapper>
                 )}
-                {!guessSubmitted && mapNumber && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>
+                {!guessSubmitted && mapNumber && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='fixed bottom-10 right-10 z-50'>
                     <Map
                     height={mapHover ? 25 : 7.8125}
                     width={mapHover ? 25 : 7.8125}
