@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import UserPageSkeleton from '@/app/UserPageSkeleton';
+import { Suspense } from 'react';
 
 interface UserAPIResponse {
     userData: User;
@@ -18,9 +20,13 @@ interface User {
     averagePointsWeekly: number;
 }
 
-const UserPage = async ({ params }: { params: { userID: string } }) => {
+interface PageProps {
+  params: { userID: string };
+  searchParams: Record<string, string | string[] | undefined>;
+}
 
-    params = await params;
+const UserPage = async ({ params }: PageProps) => {
+  params = await params;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/fetchUserData/${params.userID}`, {
         method: 'GET',
     });
