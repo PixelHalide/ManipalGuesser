@@ -222,7 +222,7 @@ app.get('/leaderboard/:category/:page', (req, res) => {
             }
 
             const sortField = category === "weekly" ? "weeklyPoints" : "totalPoints";
-            const leaderboard = await collection.find({sortField: { "$gt": 0 } })
+            const leaderboard = await collection.find({[sortField]: { "$gt": 0 } })
                 .sort({ [sortField]: -1 })
                 .project({
                     "userID": 1,
@@ -251,7 +251,43 @@ app.get('/leaderboard/:category/:page', (req, res) => {
     })();
 });
 
+app.get('/fetchSelfData/:userID', (req, res) => {
+    (async () => {
+        try {
+            const userID = req.params.userID;
 
+            const db = client.db(DB_NAME);
+            const collection = db.collection("userData");
+
+            const userData = await collection.findOne(
+                { userID },
+                {
+                    projection: {
+                        "_id":0,
+                        "weeklyPoints": 1,
+                        "totalPoints": 1,
+                        "averagePoints": 1,
+                        "averagePointsWeekly": 1,
+                        "gamesPlayed": 1,
+                        "gamesPlayedWeekly": 1
+                    }
+                }
+            );
+
+            const userTotalRank = await collection.countDocuments({"totalPoints": { "$gt": userData!.totalPoints }}) + 1;
+            const userWeeklyRank = await collection.countDocuments({"weeklyPoints": { "$gt": userData!.weeklyPoints }}) + 1;
+
+            if (!userData) {
+                return res.status(404).send({ error: "User not found" });
+            }
+
+            res.status(200).send({ userData, userTotalRank, userWeeklyRank });
+        } catch (error) {
+            console.log("Invalid Input");
+            return res.status(500).send({ error: "Error generating response" });
+        }
+    })();
+});
 
 // Start server
 async function startServer() {
