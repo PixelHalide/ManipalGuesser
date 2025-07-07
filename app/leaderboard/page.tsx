@@ -19,11 +19,11 @@ interface LeaderboardData {
 
 const Page = () => {
 
-  const [selectedPage, setSelectedPage] = useState(1)
-  const [leaderboardType, setLeaderboardType] = useState<'total' | 'weekly'>('total')
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([])
-  const [playerCount, setPlayerCount] = useState(0)
-  const [loading, setLoading] = useState(true)
+  const [selectedPage, setSelectedPage] = useState(1);
+  const [leaderboardType, setLeaderboardType] = useState<'total' | 'weekly'>('total');
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([]);
+  const [playerCount, setPlayerCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +46,7 @@ const Page = () => {
   }, [selectedPage, leaderboardType])
   console.log(leaderboardData)
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 pb-8">
       {loading
         ? <BoardSkeleton
         isSelected={leaderboardType}
