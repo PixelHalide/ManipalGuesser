@@ -96,7 +96,7 @@ const Home = () => {
   }
 
   return (
-    <div>
+    <div className="h-screen w-screen bg-black">
         {guessSubmitted && markerCords && imageCords && <ScoreScreen
             attainedScore={points}
             clickedLocation={markerCords}
@@ -104,15 +104,26 @@ const Home = () => {
             onNextGame={resetGame}
             distanceFromActualLocation={guessDistance}
             />}
-        <div className='flex justify-center items-center min-h-screen overflow-hidden'>
-            <div className='relative'>
+        <div className='flex justify-center items-center h-full w-full'>
+            <div className='relative h-full w-full'>
                 {mapNumber && (
-                    <TransformWrapper>
-                        <TransformComponent>
+                    <TransformWrapper
+                        initialScale={1.5}
+                        minScale={0.5}
+                        maxScale={5}
+                        centerOnInit={true}
+                        limitToBounds={false}
+                        panning={{ disabled: false, velocityDisabled: false }}
+                        wheel={{ step: 0.2 }}
+                    >
+                        <TransformComponent
+                            wrapperStyle={{ height: "100vh", width: "100vw" }}
+                            contentStyle={{ height: "100vh", width: "100vw" }}
+                        >
                             <LazyLoadImage
                                 src={imgPath}
                                 alt="Manipal location to guess"
-                                className='max-h-[93vh] object-contain'
+                                className='object-cover h-full w-full'
                                 width={1920}
                                 height={1080}
                             />
