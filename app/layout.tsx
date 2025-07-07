@@ -6,8 +6,8 @@ import NavbarAuth from "../Components/NavbarAuth";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: "ManipalGuessr",
-  description: "Guess the location in Manipal!",
+  title: "ManipalGuessr - Campus Location Guessing Game",
+  description: "Test your knowledge of Manipal campus! Guess locations around Manipal from photos and compete with friends on the leaderboard.",
 };
 
 export default function RootLayout({

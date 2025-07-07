@@ -6,11 +6,17 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import ScoreScreen from '../Components/GuessScreen/ScoreScreen';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import dynamic from 'next/dynamic';
+import Configuration from '../config.json';
 
 // Dynamically import ResultMap to prevent SSR issues
 const Map = dynamic(() => import('../Components/Map'), {
     ssr: false,
 });
+
+interface Config {
+    mapCount: number;
+    imageFormat: string;
+}
 
 interface BackendReturn {
     points: number
@@ -27,14 +33,21 @@ const Home = () => {
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
     const [guessSubmitted, set_submit] = useState(false);
     const [mapNumber, set_map] = useState<number | null>(null);
+    const [previousMap, set_previousMap] = useState<number | null>(null);
 
     const { data: session } = useSession()
 
-    const imgPath = `/manipalPictures/${mapNumber}.jpg`
+    const config: Config = Configuration as Config;
+    const imgPath = `/locationPictures/${mapNumber}.${config.imageFormat}`;
 
     useEffect(() => {
-        set_map(Math.floor((Math.random() * 15) + 1));
-    }, []);
+        let randomMap = Math.floor((Math.random() * config.mapCount) + 1);
+
+        while (randomMap === previousMap && config.mapCount > 1) {
+            randomMap = Math.floor((Math.random() * config.mapCount) + 1);
+        }
+        set_map(randomMap);
+    }, [previousMap]);
 
     const fetchCords = (cords: [number, number]) => {
         set_cords([cords[0],cords[1]]);
@@ -46,7 +59,15 @@ const Home = () => {
         set_hover(false);
         set_cords(null);
         set_submit(false);
-        set_map(Math.floor((Math.random() * 15) + 1));
+        set_previousMap(mapNumber);
+
+        let randomMap = Math.floor((Math.random() * config.mapCount) + 1);
+
+        while (randomMap === mapNumber && config.mapCount > 1) {
+            randomMap = Math.floor((Math.random() * config.mapCount) + 1);
+        }
+
+        set_map(randomMap);
     };
 
   const submitGuess = async () => {
@@ -57,7 +78,7 @@ const Home = () => {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await fetch(`${baseUrl}/calcScore`, {
         method:"POST",
-        headers: {'Content-Type': 'application/json', },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({"mapNumber":mapNumber,"submittedCords":markerCords, "userID": session?.user?.id || null}),
     })
     if (!response.ok) {
@@ -83,7 +104,7 @@ const Home = () => {
             onNextGame={resetGame}
             distanceFromActualLocation={guessDistance}
             />}
-        <div className='flex justify-center items-center max-h-screen overflow-hidden'>
+        <div className='flex justify-center items-center min-h-screen overflow-hidden'>
             <div className='relative'>
                 {mapNumber && (
                     <TransformWrapper>

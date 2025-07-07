@@ -3,12 +3,18 @@ import cors from 'cors';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
 import pkg from 'exifr';
+import Configuration from './config.json' with { type: 'json' };
 const { gps } = pkg;
 
 interface CalcScoreRequestBody {
     mapNumber: number;
     submittedCords: [number, number];
     userID: string | null;
+}
+
+interface Config {
+    pointScalingFactor: number;
+    imageFormat: string;
 }
 
 dotenv.config()
@@ -29,6 +35,8 @@ if (!CONNECTION_STRING) {
 
 const client = new MongoClient(CONNECTION_STRING);
 
+const config: Config = Configuration as Config;
+
 // Routes
 app.get('/', (req, res) => {
   res.status(200).send("API is Up");
@@ -43,7 +51,7 @@ app.post('/calcScore', (req, res: express.Response) => {
             userID
         }: CalcScoreRequestBody = req.body
 
-    const imgPath = `./public/manipalPictures/${mapNumber}.jpg`
+    const imgPath = `./public/locationPictures/${mapNumber}.${config.imageFormat}`;
 
     const coords = await gps(imgPath);
     let imageCords;
@@ -77,7 +85,7 @@ app.post('/calcScore', (req, res: express.Response) => {
     if (distanceInMeters < 10) {
       distanceInMeters = 0;
     }
-    let points = -2.59*distanceInMeters + 5000
+    let points = -config.pointScalingFactor * distanceInMeters + 5000
     /*
     Assuming a square map of 1.87km^2, if the guess is on the opposite corner, the points awarded are 0
     Fo a perfect guess, 5k points are awarded.
