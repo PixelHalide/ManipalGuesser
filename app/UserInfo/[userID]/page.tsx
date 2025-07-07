@@ -1,6 +1,4 @@
 import Image from 'next/image';
-import UserPageSkeleton from '@/app/UserPageSkeleton';
-import { Suspense } from 'react';
 
 interface UserAPIResponse {
     userData: User;
