@@ -43,7 +43,10 @@ const UserPage = async () => {
         );
     }
 
-    const { userData: user, userTotalRank, userWeeklyRank } = userData;
+    let { userData: user, userTotalRank, userWeeklyRank } = userData;
+
+    if (user.totalPoints === 0) userTotalRank = 0;
+    if (user.weeklyPoints === 0) userWeeklyRank = 0;
 
   return (
     <div className='flex flex-col items-center'>
