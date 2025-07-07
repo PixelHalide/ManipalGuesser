@@ -19,13 +19,13 @@ interface User {
 }
 
 interface PageProps {
-  params: { userID: string };
-  searchParams: Record<string, string | string[] | undefined>;
+  params: Promise<{ userID: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 const UserPage = async ({ params }: PageProps) => {
-  params = await params;
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/fetchUserData/${params.userID}`, {
+  const resolvedParams = await params;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/fetchUserData/${resolvedParams.userID}`, {
         method: 'GET',
     });
 
