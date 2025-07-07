@@ -60,7 +60,7 @@ const UserPage = async () => {
         <div className='flex flex-col sm:flex-row gap-8 items-center justify-center mb-10 mt-12'>
             <div className='bg-blue-800/20 text-blue-400 border border-blue-400/60 px-8 py-8 rounded-lg shadow-[0_0_30px_0_rgba(96,165,250,0.3)]'>
                 <h2 className='text-blue-600 dark:text-blue-500 text-center text-4xl mb-4'>Overall</h2>
-                <p className={` ${userTotalRank === 1 ? 'text-yellow-300 text-shadow-amber-300 text-shadow-md' : 'text-gray-900 dark:text-neutral-200'} text-6xl text-center mb-6`}>#{userTotalRank}</p>
+                <p className={` ${userTotalRank === 1 ? 'text-yellow-300 dark:text-shadow-amber-300 text-shadow-black text-shadow-md' : 'text-gray-900 dark:text-neutral-200'} text-6xl text-center mb-6`}>#{userTotalRank}</p>
                 <div className='flex flex-row justify-between gap-4'>
                     <div className='flex flex-col items-center p-4 bg-gray-200/80 dark:bg-gray-700/50 rounded-lg min-w-[80px]'>
                         <p className='text-2xl font-bold text-gray-900 dark:text-white'>{user.totalPoints.toFixed(0)}</p>
@@ -78,7 +78,7 @@ const UserPage = async () => {
             </div>
             <div className='bg-green-400/20 text-green-400 border border-green-400/60 px-8 py-8 rounded-lg shadow-[0_0_30px_0_rgba(34,197,94,0.3)]'>
                 <h2 className='text-green-600 dark:text-green-500 text-center text-4xl mb-4'>Weekly</h2>
-                <p className={` ${userWeeklyRank === 1 ? 'text-yellow-300 text-shadow-amber-300 text-shadow-md' : 'text-gray-900 dark:text-neutral-200'} text-6xl text-center mb-6`}>#{userWeeklyRank}</p>
+                <p className={` ${userWeeklyRank === 1 ? 'text-yellow-300 dark:text-shadow-amber-300 text-shadow-black text-shadow-md' : 'text-gray-900 dark:text-neutral-200'} text-6xl text-center mb-6`}>#{userWeeklyRank}</p>
                 <div className='flex flex-row justify-between gap-4'>
                     <div className='flex flex-col items-center p-4 bg-gray-200/80 dark:bg-gray-700/50 rounded-lg min-w-[80px]'>
                         <p className='text-2xl font-bold text-gray-900 dark:text-white'>{user.weeklyPoints.toFixed(0)}</p>
