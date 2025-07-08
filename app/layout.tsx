@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next"
+import { GoogleAnalytics } from '@next/third-parties/google'
 import "./globals.css";
 import "@theme-toggles/react/css/Expand.css"
 import NavbarAuth from "../Components/NavbarAuth";
@@ -25,6 +26,7 @@ export default function RootLayout({
           </div>
           <Analytics />
         </Providers>
+        <GoogleAnalytics gaId="G-ZRFNTZL6ZN" />
       </body>
     </html>
   );
