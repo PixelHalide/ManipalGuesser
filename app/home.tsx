@@ -6,11 +6,17 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import ScoreScreen from '../Components/GuessScreen/ScoreScreen';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import dynamic from 'next/dynamic';
+import Configuration from '../config.json';
 
 // Dynamically import ResultMap to prevent SSR issues
 const Map = dynamic(() => import('../Components/Map'), {
     ssr: false,
 });
+
+interface Config {
+    mapCount: number;
+    imageFormat: string;
+}
 
 interface BackendReturn {
     points: number
@@ -27,14 +33,21 @@ const Home = () => {
     const [markerCords, set_cords] = useState<[number, number] | null>(null);
     const [guessSubmitted, set_submit] = useState(false);
     const [mapNumber, set_map] = useState<number | null>(null);
+    const [previousMap, set_previousMap] = useState<number | null>(null);
 
     const { data: session } = useSession()
 
-    const imgPath = `/manipalPictures/${mapNumber}.jpg`
+    const config: Config = Configuration as Config;
+    const imgPath = `/locationPictures/${mapNumber}.${config.imageFormat}`;
 
     useEffect(() => {
-        set_map(Math.floor((Math.random() * 15) + 1));
-    }, []);
+        let randomMap = Math.floor((Math.random() * config.mapCount) + 1);
+
+        while (randomMap === previousMap && config.mapCount > 1) {
+            randomMap = Math.floor((Math.random() * config.mapCount) + 1);
+        }
+        set_map(randomMap);
+    }, [previousMap]);
 
     const fetchCords = (cords: [number, number]) => {
         set_cords([cords[0],cords[1]]);
@@ -46,7 +59,15 @@ const Home = () => {
         set_hover(false);
         set_cords(null);
         set_submit(false);
-        set_map(Math.floor((Math.random() * 15) + 1));
+        set_previousMap(mapNumber);
+
+        let randomMap = Math.floor((Math.random() * config.mapCount) + 1);
+
+        while (randomMap === mapNumber && config.mapCount > 1) {
+            randomMap = Math.floor((Math.random() * config.mapCount) + 1);
+        }
+
+        set_map(randomMap);
     };
 
   const submitGuess = async () => {
@@ -57,7 +78,7 @@ const Home = () => {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await fetch(`${baseUrl}/calcScore`, {
         method:"POST",
-        headers: {'Content-Type': 'application/json', },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({"mapNumber":mapNumber,"submittedCords":markerCords, "userID": session?.user?.id || null}),
     })
     if (!response.ok) {
@@ -75,7 +96,7 @@ const Home = () => {
   }
 
   return (
-    <div>
+    <div className="h-screen w-screen bg-black overflow-hidden">
         {guessSubmitted && markerCords && imageCords && <ScoreScreen
             attainedScore={points}
             clickedLocation={markerCords}
@@ -83,44 +104,62 @@ const Home = () => {
             onNextGame={resetGame}
             distanceFromActualLocation={guessDistance}
             />}
-        <div className='flex justify-center items-center max-h-screen overflow-hidden'>
-            <div className='relative'>
+        {!guessSubmitted && mapNumber && (
+          <div
+            onMouseOver={() => set_hover(true)}
+            onMouseLeave={() => set_hover(false)}
+            className="fixed bottom-10 right-10 z-50"
+          >
+            <Map
+              height={mapHover ? 25 : 7.8125}
+              width={mapHover ? 25 : 7.8125}
+              setCords={fetchCords}
+            />
+            <button
+              className={`inline-flex h-12 items-center justify-center rounded-md font-medium mt-2 transition-all ${
+                markerCords
+                  ? 'bg-neutral-950 text-neutral-50 active:scale-110 cursor-pointer'
+                  : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+              }`}
+              style={{
+                width: mapHover ? '25rem' : '7.8125rem',
+                paddingLeft: '1.5rem',
+                paddingRight: '1.5rem'
+              }}
+              onClick={() => markerCords && submitGuess()}
+              disabled={!markerCords}
+            >
+              Submit
+            </button>
+          </div>
+        )}
+        <div className='flex justify-center items-center h-full w-full'>
+            <div className='relative h-full w-full'>
                 {mapNumber && (
-                    <TransformWrapper>
-                        <TransformComponent>
+                    <TransformWrapper
+                        initialScale={1.5}
+                        minScale={0.5}
+                        maxScale={5}
+                        centerOnInit={true}
+                        limitToBounds={false}
+                        panning={{ disabled: false, velocityDisabled: false }}
+                        wheel={{ step: 0.2 }}
+                    >
+                        <TransformComponent
+                            wrapperStyle={{ height: "100vh", width: "100vw" }}
+                            contentStyle={{ height: "100vh", width: "100vw" }}
+                        >
                             <LazyLoadImage
                                 src={imgPath}
                                 alt="Manipal location to guess"
-                                className='max-h-[93vh] object-contain'
+                                className='object-cover h-full w-full'
                                 width={1920}
                                 height={1080}
                             />
                         </TransformComponent>
                     </TransformWrapper>
                 )}
-                {!guessSubmitted && mapNumber && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='absolute bottom-10 right-10'>
-                    <Map
-                    height={mapHover ? 400 : 125}
-                    width={mapHover ? 400 : 125}
-                    setCords={fetchCords}
-                    />
-                    <button
-                        className={`inline-flex h-12 items-center justify-center rounded-md px-6 font-medium mt-2 transition-all ${
-                            markerCords
-                                ? 'bg-neutral-950 text-neutral-50 active:scale-110 cursor-pointer'
-                                : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                        }`}
-                        style={{ width: mapHover ? 400 : 125 }}
-                        onClick={() => {
-                            if (markerCords) {
-                                submitGuess();
-                            }
-                        }}
-                        disabled={!markerCords}
-                    >
-                        Submit
-                    </button>
-                </div>}
+                {/* Image-only area; map control is fixed separately */}
             </div>
         </div>
     </div>

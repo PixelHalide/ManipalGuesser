@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Trophy, Medal, Award } from "lucide-react";
+import Link from "next/link";
 import BoardSelect from "./BoardSelect";
 import PageSelect from './PageSelect';
 
@@ -71,7 +72,7 @@ const Board = ({ leaderboardData, totalPlayers, leaderboardType, setPageNumber, 
           isSelected={leaderboardType}
         />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gray-900/80 rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-gray-900/80 rounded-lg shadow-lg overflow-scroll">
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-blue-500 to-purple-600 text-neutral-200">
@@ -86,12 +87,14 @@ const Board = ({ leaderboardData, totalPlayers, leaderboardType, setPageNumber, 
                 {leaderboardData.map((player, index) => (
                   <tr key={player.userID} className={`hover:bg-gray-700 ${getBackgroundColor(index)}`}>
                     <td className="p-4">
-                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-700 text-blue-800 font-semibold">
-                        {getRankIcon(index)}
-                      </span>
+                      <Link href={`/userinfo/${player.userID}`} className="flex items-center space-x-3">
+                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-700 text-blue-800 font-semibold">
+                          {getRankIcon(index)}
+                        </span>
+                      </Link>
                     </td>
                     <td className="p-4">
-                      <div className="flex items-center space-x-3">
+                      <Link href={`/userinfo/${player.userID}`} className="flex items-center space-x-3">
                         <Image
                           width={40}
                           height={40}
@@ -103,22 +106,22 @@ const Board = ({ leaderboardData, totalPlayers, leaderboardType, setPageNumber, 
                           <h3 className="font-medium text-neutral-200">{player.userName}</h3>
                           <h4 className="text-sm text-neutral-500">@{player.discordUser}</h4>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                     <td className="p-4 text-center">
-                      <div className="text-lg font-semibold text-neutral-200">
+                      <Link href={`/userinfo/${player.userID}`} className="text-lg font-semibold text-neutral-200">
                         {leaderboardType === 'total' ? player.totalPoints.toFixed(0) : player.weeklyPoints.toFixed(0)} pts
-                      </div>
+                      </Link>
                     </td>
                       <td className="p-4 text-center">
-                        <div className="text-lg font-semibold text-neutral-200">
+                        <Link href={`/userinfo/${player.userID}`} className="text-lg font-semibold text-neutral-200">
                           {leaderboardType === 'total' ? player.averagePoints.toFixed(0) : player.averagePointsWeekly.toFixed(0)} pts
-                        </div>
+                        </Link>
                       </td>
                       <td className="p-4 text-center">
-                        <div className="text-lg font-semibold text-neutral-200">
+                        <Link href={`/userinfo/${player.userID}`} className="text-lg font-semibold text-neutral-200">
                           {leaderboardType === 'total' ? player.gamesPlayed.toFixed(0) : player.gamesPlayedWeekly.toFixed(0)}
-                        </div>
+                        </Link>
                       </td>
                   </tr>
                 ))}

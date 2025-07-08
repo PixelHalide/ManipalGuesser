@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/third-parties": "^15.3.5",
     "@theme-toggles/react": "^4.1.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
@@ -42,5 +43,11 @@
     "eslint": "^9.29.0",
     "tailwindcss": "^4",
     "typescript": "5.8.3"
+  },
+  "overrides": {
+  "@theme-toggles/react": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
+}
 }

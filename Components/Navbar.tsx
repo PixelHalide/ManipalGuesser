@@ -31,8 +31,8 @@ const Navbar = () => {
     }
 
     return (
-        <div className={`sticky top-0 z-30 bg-gray-200 dark:bg-neutral-900 dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2 transition-all`}>
-            <nav className="flex flex-wrap flex-col md:flex-row justify-between items-center mb-2 pt-2 px-4 text-sm md:text-lg">
+        <div className={` bg-gray-200 dark:bg-neutral-900 dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2 transition-all w-screen`}>
+            <nav className="flex flex-wrap md:flex-row justify-between items-center mb-2 pt-2 px-4 text-sm md:text-lg">
                 <div>
                     <div className='flex flex-row items-center'>
                         <Image
@@ -59,6 +59,11 @@ const Navbar = () => {
                     <div className='p-2'>
                         <Link href="/contact" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
                             Contact Us
+                        </Link>
+                    </div>
+                    <div className='p-2'>
+                        <Link href="/about" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
+                            About Us
                         </Link>
                     </div>
                 </div>
