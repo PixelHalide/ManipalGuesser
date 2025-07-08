@@ -20,12 +20,10 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen flex flex-col transition-all">
         <Providers>
-          <NavbarAuth />
-          <div className="flex-grow">
-            {children}
-          </div>
-          <Analytics />
           <GoogleAnalytics gaId="G-ZRFNTZL6ZN" />
+          <NavbarAuth />
+            {children}
+          <Analytics />
         </Providers>
       </body>
     </html>
