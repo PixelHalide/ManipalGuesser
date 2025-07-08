@@ -104,6 +104,35 @@ const Home = () => {
             onNextGame={resetGame}
             distanceFromActualLocation={guessDistance}
             />}
+        {!guessSubmitted && mapNumber && (
+          <div
+            onMouseOver={() => set_hover(true)}
+            onMouseLeave={() => set_hover(false)}
+            className="fixed bottom-10 right-10 z-50"
+          >
+            <Map
+              height={mapHover ? 25 : 7.8125}
+              width={mapHover ? 25 : 7.8125}
+              setCords={fetchCords}
+            />
+            <button
+              className={`inline-flex h-12 items-center justify-center rounded-md font-medium mt-2 transition-all ${
+                markerCords
+                  ? 'bg-neutral-950 text-neutral-50 active:scale-110 cursor-pointer'
+                  : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+              }`}
+              style={{
+                width: mapHover ? '25rem' : '7.8125rem',
+                paddingLeft: '1.5rem',
+                paddingRight: '1.5rem'
+              }}
+              onClick={() => markerCords && submitGuess()}
+              disabled={!markerCords}
+            >
+              Submit
+            </button>
+          </div>
+        )}
         <div className='flex justify-center items-center h-full w-full'>
             <div className='relative h-full w-full'>
                 {mapNumber && (
@@ -130,33 +159,7 @@ const Home = () => {
                         </TransformComponent>
                     </TransformWrapper>
                 )}
-                {!guessSubmitted && mapNumber && <div onMouseOver={() => {set_hover(true)}} onMouseLeave={() => {set_hover(false)}} className='fixed bottom-10 right-10 z-50'>
-                    <Map
-                    height={mapHover ? 25 : 7.8125}
-                    width={mapHover ? 25 : 7.8125}
-                    setCords={fetchCords}
-                    />
-                    <button
-                        className={`inline-flex h-12 items-center justify-center rounded-md font-medium mt-2 transition-all ${
-                            markerCords
-                                ? 'bg-neutral-950 text-neutral-50 active:scale-110 cursor-pointer'
-                                : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                        }`}
-                        style={{
-                            width: mapHover ? '25rem' : '7.8125rem',
-                            paddingLeft: '1.5rem',
-                            paddingRight: '1.5rem'
-                        }}
-                        onClick={() => {
-                            if (markerCords) {
-                                submitGuess();
-                            }
-                        }}
-                        disabled={!markerCords}
-                    >
-                        Submit
-                    </button>
-                </div>}
+                {/* Image-only area; map control is fixed separately */}
             </div>
         </div>
     </div>
