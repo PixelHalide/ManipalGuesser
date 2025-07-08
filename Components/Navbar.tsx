@@ -32,7 +32,7 @@ const Navbar = () => {
 
     return (
         <div className={` bg-gray-200 dark:bg-neutral-900 dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2 transition-all w-screen`}>
-            <nav className="flex flex-wrap md:flex-row justify-between items-center mb-2 pt-2 px-4 text-sm md:text-lg">
+            <nav className="relative flex flex-wrap md:flex-row justify-between items-center mb-2 pt-2 px-4 text-sm md:text-lg">
                 <div>
                     <div className='flex flex-row items-center'>
                         <Image
@@ -45,7 +45,7 @@ const Navbar = () => {
                         <p className='font-prompt font-extrabold text-2xl md:text-4xl mt-2 ml-3'>ManipalGuessr</p>
                     </div>
                 </div>
-                <div className='flex flex-col md:flex-row justify-center items-center'>
+                <div className='absolute left-1/2 transform -translate-x-1/2 flex flex-row justify-center items-center space-x-4'>
                     <div className='p-2'>
                         <Link href="/" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
                             Home
