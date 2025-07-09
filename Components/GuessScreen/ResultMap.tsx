@@ -76,8 +76,16 @@ const ResultMap = ({clickedLocation, actualLocation}: MapSizeProp) => {
     }
   }, [clickedLocation, actualLocation]);
 
-  return <div ref={mapContainer} style={{ width: 1000, height: 500 }} className='transiton-all rounded-md'></div>
-
+  return (
+    <div
+      ref={mapContainer}
+      style={{
+        width: 'var(--map-width)',
+        height: 'var(--map-height)'
+      }}
+      className='transition-all rounded-md [--map-width:300px] [--map-height:300px] sm:[--map-width:400px] sm:[--map-height:400px] md:[--map-width:1000px] md:[--map-height:500px]'
+    ></div>
+  );
 };
 
 export default ResultMap;

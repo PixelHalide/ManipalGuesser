@@ -5,14 +5,7 @@ import ProgressBar from "./ProgressBar"
 
 // Dynamically import ResultMap to prevent SSR issues
 const ResultMap = dynamic(() => import('./ResultMap'), {
-    ssr: false,
-    loading: () => (
-        <div className="animate-pulse bg-gray-200 rounded-md" style={{width: 1000, height: 500}}>
-            <div className="flex items-center justify-center h-full text-gray-500">
-                Loading map...
-            </div>
-        </div>
-    )
+    ssr: false
 })
 
 interface ScoreProp {
@@ -26,11 +19,13 @@ interface ScoreProp {
 const ScoreScreen = ({ attainedScore, clickedLocation, actualLocation, distanceFromActualLocation,  onNextGame } : ScoreProp) => {
   return (
     <div className='fixed inset-0 bg-black/50 z-50 flex justify-center items-center'>
-        <div className='flex flex-col justify-center p-10 bg-[#EEEEEE] dark:bg-neutral-800 rounded-lg text-center'>
-            <ResultMap
-            clickedLocation={clickedLocation}
-            actualLocation={actualLocation}
-            />
+        <div className='flex flex-col max-w-[95vw] justify-center p-4 md:p-10 bg-[#EEEEEE] dark:bg-neutral-800 rounded-lg text-center'>
+            <div className='overflow-hidden rounded-lg'>
+              <ResultMap
+              clickedLocation={clickedLocation}
+              actualLocation={actualLocation}
+              />
+            </div>
             <ProgressBar
             targetProgress={((attainedScore*100)/5000)}
             intervalTime={20}
