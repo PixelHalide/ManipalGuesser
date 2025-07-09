@@ -14,7 +14,7 @@ import SignUpIn from "./SignUpIn"
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(true)
-  const [menuOpen, setMenuOpen] = useState(false)   
+  const [menuOpen, setMenuOpen] = useState(false)
   const { data: session } = useSession()
 
   useEffect(() => {
@@ -32,9 +32,7 @@ const Navbar = () => {
 
   return (
     <div className="bg-gray-200 dark:bg-neutral-900 dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2 w-full transition-all">
-      {/* Navbar container */}
       <nav className="relative flex items-center justify-between px-4 py-3 md:px-6">
-        {/* Logo */}
         <div className="flex items-center">
           <Image
             src={darkMode ? dark_logo : logo}
@@ -52,9 +50,6 @@ const Navbar = () => {
             <Link href="/contact" className="hover:text-gray-600 dark:hover:text-gray-400">Contact Us</Link>
             <Link href="/about" className="hover:text-gray-600 dark:hover:text-gray-400">About Us</Link>
         </div>
-
-
-        {/* Right side controls */}
         <div className="flex items-center gap-4">
           <Expand
             toggled={darkMode}
@@ -67,7 +62,6 @@ const Navbar = () => {
             {!session?.user ? <SignUpIn /> : <UserIcon />}
           </SessionProvider>
 
-          {/* Hamburger Icon (only on small screens) */}
           <div className="lg:hidden">
             <button onClick={toggleMenu}>
               <Image src={darkMode ? hamburgerDark : hamburgerLight } alt="Menu" width={28} height={28} />
@@ -76,15 +70,14 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Dropdown Mobile Menu */}
       <div
     className={`
-            lg:hidden bg-neutral-900 text-white 
-            flex flex-col items-center 
-            transition-all duration-700 ease-in-out 
-            transform overflow-hidden 
-            ${menuOpen 
-            ? 'max-h-96 opacity-100 scale-100 translate-y-0 py-4 space-y-4 border-t border-neutral-600' 
+            lg:hidden bg-neutral-900 text-white
+            flex flex-col items-center
+            transition-all duration-700 ease-in-out
+            transform overflow-hidden
+            ${menuOpen
+            ? 'max-h-96 opacity-100 scale-100 translate-y-0 py-4 space-y-4 border-t border-neutral-600'
             : 'max-h-0 opacity-0 scale-95 -translate-y-4 py-0 space-y-0 border-t border-transparent'}
         `}>
             <Link href="/" onClick={toggleMenu} className="hover:text-gray-400 transition-colors">Home</Link>
