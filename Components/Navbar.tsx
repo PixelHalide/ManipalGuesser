@@ -8,82 +8,85 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dark_logo from '../public/logo.png'
 import logo from '../public/logo_black.png'
+import hamburgerDark from '../public/hamburger-dark.svg'
+import hamburgerLight from '../public/hamburger-light.svg'
 import SignUpIn from "./SignUpIn"
 
-
 const Navbar = () => {
+  const [darkMode, setDarkMode] = useState(true)
+  const [menuOpen, setMenuOpen] = useState(false)   
+  const { data: session } = useSession()
 
-    const [darkMode, setDarkMode] = useState(true);
-    const { data: session } = useSession();
-
-    useEffect(() => {
-        if (darkMode) {
-            document.documentElement.classList.add('dark')
-            document.body.style.backgroundColor = '#000000'
-        } else {
-            document.documentElement.classList.remove('dark')
-            document.body.style.backgroundColor = '#e5e7eb'
-        }
-    }, [darkMode])
-
-    const toggleDarkMode = () => {
-        setDarkMode(!darkMode)
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark')
+      document.body.style.backgroundColor = '#000000'
+    } else {
+      document.documentElement.classList.remove('dark')
+      document.body.style.backgroundColor = '#e5e7eb'
     }
+  }, [darkMode])
 
-    return (
-        <div className={` bg-gray-200 dark:bg-neutral-900 dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2 transition-all w-screen`}>
-            <nav className="relative flex flex-wrap md:flex-row justify-between items-center mb-2 pt-2 px-4 text-sm md:text-lg">
-                <div>
-                    <div className='flex flex-row items-center'>
-                        <Image
-                            src={darkMode ? dark_logo : logo}
-                            alt="Logo"
-                            className='w-8 h-8'
-                            width={32}
-                            height={32}
-                        />
-                        <p className='font-prompt font-extrabold text-2xl md:text-4xl mt-2 ml-3'>ManipalGuessr</p>
-                    </div>
-                </div>
-                <div className='absolute left-1/2 transform -translate-x-1/2 flex flex-row justify-center items-center space-x-4'>
-                    <div className='p-2'>
-                        <Link href="/" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
-                            Home
-                        </Link>
-                    </div>
-                    <div className='p-2'>
-                        <Link href="/leaderboard" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
-                            Leaderboard
-                        </Link>
-                    </div>
-                    <div className='p-2'>
-                        <Link href="/contact" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
-                            Contact Us
-                        </Link>
-                    </div>
-                    <div className='p-2'>
-                        <Link href="/about" className="py-1 px-4 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200">
-                            About Us
-                        </Link>
-                    </div>
-                </div>
-                <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-4">
-                    <Expand
-                        toggled={darkMode}
-                        toggle={toggleDarkMode}
-                        placeholder={undefined}
-                        onPointerEnterCapture={undefined}
-                        onPointerLeaveCapture={undefined}
-                    />
-                    <div className="mt-2 md:mt-0">
-                        <SessionProvider session={session}>
-                            {!session?.user ? <SignUpIn /> : <UserIcon />}
-                        </SessionProvider>
-                    </div>
-                </div>
-            </nav>
+  const toggleDarkMode = () => setDarkMode(!darkMode)
+  const toggleMenu = () => setMenuOpen(prev => !prev)
+
+  return (
+    <div className="bg-gray-200 dark:bg-neutral-900 dark:text-neutral-200 border-[#383838] dark:border-gray-300 border-b-2 w-full transition-all">
+      {/* Navbar container */}
+      <nav className="relative flex items-center justify-between px-4 py-3 md:px-6">
+        {/* Logo */}
+        <div className="flex items-center">
+          <Image
+            src={darkMode ? dark_logo : logo}
+            alt="Logo"
+            className="w-8 h-8"
+            width={32}
+            height={32}
+          />
+          <p className="font-prompt font-extrabold text-2xl md:text-4xl mt-0 ml-3 whitespace-nowrap">ManipalGuessr</p>
         </div>
-    )
+
+        <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:flex gap-6 md:gap-4 text-sm lg:text-lg">
+            <Link href="/" className="hover:text-gray-600 dark:hover:text-gray-400">Home</Link>
+            <Link href="/leaderboard" className="hover:text-gray-600 dark:hover:text-gray-400">Leaderboard</Link>
+            <Link href="/contact" className="hover:text-gray-600 dark:hover:text-gray-400">Contact Us</Link>
+            <Link href="/about" className="hover:text-gray-600 dark:hover:text-gray-400">About Us</Link>
+        </div>
+
+
+        {/* Right side controls */}
+        <div className="flex items-center gap-4">
+          <Expand
+            toggled={darkMode}
+            toggle={toggleDarkMode}
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          />
+          <SessionProvider session={session}>
+            {!session?.user ? <SignUpIn /> : <UserIcon />}
+          </SessionProvider>
+
+          {/* Hamburger Icon (only on small screens) */}
+          <div className="lg:hidden">
+            <button onClick={toggleMenu}>
+              <Image src={darkMode ? hamburgerDark : hamburgerLight } alt="Menu" width={28} height={28} />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Dropdown Mobile Menu */}
+      {menuOpen && (
+        <div className="lg:hidden flex flex-col items-start space-y-3 px-6 pb-4 text-sm animate-fadeIn">
+          <Link href="/" onClick={toggleMenu} className="hover:text-gray-600 dark:hover:text-gray-400">Home</Link>
+          <Link href="/leaderboard" onClick={toggleMenu} className="hover:text-gray-600 dark:hover:text-gray-400">Leaderboard</Link>
+          <Link href="/contact" onClick={toggleMenu} className="hover:text-gray-600 dark:hover:text-gray-400">Contact Us</Link>
+          <Link href="/about" onClick={toggleMenu} className="hover:text-gray-600 dark:hover:text-gray-400">About Us</Link>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default Navbar
