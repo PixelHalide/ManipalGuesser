@@ -21,7 +21,7 @@ const page = () => {
               </p>
 
               <div className="bg-neutral-900 rounded-lg p-6 max-w-md mx-auto text-neutral-300">
-                <h3 className="text-xl font-semibold mb-4">Jacob Mathews</h3>
+                <h3 className="text-xl font-semibold mb-4">Jacob Mathew</h3>
                 <p className="mb-4">Special thanks for contributing to the project!</p>
               </div>
 
