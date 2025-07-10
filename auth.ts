@@ -5,6 +5,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     providers: [Discord({
         clientId: process.env.AUTH_DISCORD_ID!,
         clientSecret: process.env.AUTH_DISCORD_SECRET!,
+        authorization: {
+            params: {
+                scope: "identify"
+            }
+        }
     })],
     secret: process.env.AUTH_SECRET,
     callbacks: {

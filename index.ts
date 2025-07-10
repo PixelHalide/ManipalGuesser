@@ -140,7 +140,6 @@ app.post('/signUp', (req, res) => {
         const {
             userName,
             userImage,
-            userEmail,
             userID,
             globalName,
             discordUser
@@ -148,14 +147,13 @@ app.post('/signUp', (req, res) => {
 
     const db = client.db(DB_NAME);
     const collection = db.collection("userData");
-    let user = await collection.findOne({ "userEmail": userEmail });
+    let user = await collection.findOne({ "userID": userID });
 
     if (!user){
       const time = new Date().toISOString()
 
       await collection.insertOne({"userID":userID,
                                   "userName":userName,
-                                  "userEmail":userEmail,
                                   "userImage":userImage,
                                   "globalName":globalName,
                                   "discordUser":discordUser,
@@ -235,7 +233,6 @@ app.get('/leaderboard/:category/:page', (req, res) => {
                 .project({
                     "userID": 1,
                     "userName": 1,
-                    "userEmail": 1,
                     "userImage": 1,
                     "weeklyPoints": 1,
                     "totalPoints": 1,
