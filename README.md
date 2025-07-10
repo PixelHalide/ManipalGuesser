@@ -2,6 +2,8 @@
 
 A GeoGuessr-style game focused on Manipal locations! Test your knowledge of the Manipal campus by guessing locations from photographs.
 
+Hosted at https://manipal-guessr.vercel.app/
+
 ## Features
 
 - **Location Guessing Game**: View photos of various Manipal locations and guess where they were taken
