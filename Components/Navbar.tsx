@@ -58,9 +58,11 @@ const Navbar = () => {
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           />
-          <SessionProvider session={session}>
-            {!session?.user ? <SignUpIn /> : <UserIcon />}
-          </SessionProvider>
+          <div className='hidden lg:block'>
+            <SessionProvider session={session}>
+              {!session?.user ? <SignUpIn /> : <UserIcon />}
+            </SessionProvider>
+          </div>
 
           <div className="lg:hidden">
             <button onClick={toggleMenu}>
@@ -71,21 +73,18 @@ const Navbar = () => {
       </nav>
 
       <div
-    className={`
-            lg:hidden bg-neutral-900 text-white
-            flex flex-col items-center
-            transition-all duration-700 ease-in-out
-            transform overflow-hidden
+        className={`lg:hidden bg-neutral-900 text-white flex flex-col items-center transition-all duration-700 ease-in-out transform overflow-hidden
             ${menuOpen
             ? 'max-h-96 opacity-100 scale-100 translate-y-0 py-4 space-y-4 border-t border-neutral-600'
-            : 'max-h-0 opacity-0 scale-95 -translate-y-4 py-0 space-y-0 border-t border-transparent'}
-        `}>
+            : 'max-h-0 opacity-0 scale-95 -translate-y-4 py-0 space-y-0 border-t border-transparent'}`}>
             <Link href="/" onClick={toggleMenu} className="hover:text-gray-400 transition-colors">Home</Link>
             <Link href="/leaderboard" onClick={toggleMenu} className="hover:text-gray-400 transition-colors">Leaderboard</Link>
             <Link href="/contact" onClick={toggleMenu} className="hover:text-gray-400 transition-colors">Contact Us</Link>
             <Link href="/about" onClick={toggleMenu} className="hover:text-gray-400 transition-colors">About Us</Link>
-    </div>
-
+            <SessionProvider session={session}>
+              {!session?.user ? <SignUpIn /> : <UserIcon />}
+            </SessionProvider>
+      </div>
     </div>
   )
 }
