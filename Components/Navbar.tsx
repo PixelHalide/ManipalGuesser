@@ -44,7 +44,7 @@ const Navbar = () => {
           <p className="font-prompt font-extrabold text-2xl md:text-4xl mt-0 ml-3 whitespace-nowrap">ManipalGuessr</p>
         </div>
 
-        <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:flex gap-6 md:gap-4 text-sm lg:text-lg">
+        <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:flex gap-6 md:gap-6 text-sm lg:text-lg">
             <Link href="/" className="hover:text-gray-600 dark:hover:text-gray-400">Home</Link>
             <Link href="/leaderboard" className="hover:text-gray-600 dark:hover:text-gray-400">Leaderboard</Link>
             <Link href="/contact" className="hover:text-gray-600 dark:hover:text-gray-400">Contact Us</Link>

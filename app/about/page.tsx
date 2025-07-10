@@ -9,7 +9,7 @@ const page = () => {
             <div className="text-center mb-12">
               <h1 className="text-5xl font-bold mb-8">About ManipalGuessr</h1>
               <p className="text-xl mb-6">
-                ManipalGuessr is a fun geography guessing game built specifically for Manipal University and the surrounding town.
+                ManipalGuessr is a fun geography guessing game built specifically for MIT and the surrounding town.
                 Test your knowledge of campus landmarks, local spots, and hidden gems around Manipal!
               </p>
             </div>
@@ -39,7 +39,7 @@ const page = () => {
                   </a>
 
                   <a
-                    href="https://discord.com/users/180399116327714816"
+                    href="https://discord.gg/2mYN8aDPur"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-[#5865F2] hover:bg-indigo-700 px-6 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2"
