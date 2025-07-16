@@ -21,12 +21,29 @@ const Page = () => {
 
   const [selectedPage, setSelectedPage] = useState(1);
   const [leaderboardType, setLeaderboardType] = useState<'total' | 'weekly'>('total');
+  const [cachedTotalPlayers, setCachedTotalPlayers] = useState<{total: number, weekly: number}>({
+    total: 0,
+    weekly: 0
+  });
+  const [cachedPage, setCachedPage] = useState<{
+    total: LeaderboardData[][],
+    weekly: LeaderboardData[][]
+  }>({
+    total: [],
+    weekly: []
+  });
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([]);
   const [playerCount, setPlayerCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const handleLeaderboardTypeChange = (type: 'total' | 'weekly') => {
+  setLeaderboardType(type);
+  setSelectedPage(1);
+};
+
   useEffect(() => {
-    const fetchData = async () => {
+    if (!cachedPage[leaderboardType][selectedPage - 1]) {
+      const fetchData = async () => {
       setLoading(true)
       const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/${leaderboardType}/${selectedPage}`, {
         "method": "GET",
@@ -37,12 +54,28 @@ const Page = () => {
       })
       if (data.ok) {
         const response = await data.json()
-        setLeaderboardData(response.leaderboard)
-        setPlayerCount(response.totalPlayers)
+        setCachedPage(prev => ({
+          ...prev,
+          [leaderboardType]: {
+            ...prev[leaderboardType],
+            [selectedPage - 1]: response.leaderboard
+          }
+        }));
+        setCachedTotalPlayers(prev => ({
+          ...prev,
+          [leaderboardType]: response.totalPlayers
+        }));
+        setLeaderboardData(response.leaderboard);
+        setPlayerCount(response.totalPlayers);
       }
       setLoading(false)
     }
-    fetchData()
+    fetchData()}
+    else {
+      setLeaderboardData(cachedPage[leaderboardType][selectedPage - 1]);
+      setPlayerCount(cachedTotalPlayers[leaderboardType]);
+      setLoading(false);
+    }
   }, [selectedPage, leaderboardType])
   console.log(leaderboardData)
   return (
@@ -58,7 +91,7 @@ const Page = () => {
             totalPlayers={playerCount}
             leaderboardType={leaderboardType}
             setPageNumber={setSelectedPage}
-            setSelected={setLeaderboardType}
+            setSelected={handleLeaderboardTypeChange}
             pageNumber={selectedPage}
         />
       )}
