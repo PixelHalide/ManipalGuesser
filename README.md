@@ -25,6 +25,12 @@ Hosted at https://manipal-guessr.vercel.app/
 - **Image Handling**: EXIFR for metadata extraction
 - **Deployment**: Vercel
 
+## Project Structure
+
+This project is organized as a monorepo:
+- `frontend/` - Next.js frontend application
+- `backend/` - Express.js backend API
+
 ## Installation
 
 1. **Clone the repository**
@@ -38,11 +44,27 @@ Hosted at https://manipal-guessr.vercel.app/
    npm install
    ```
 
+   This will install dependencies for both frontend and backend.
+
 3. **Set up environment variables**
-   Create a `.env` file in the root directory and fill the variables
+
+   Create a `.env` file in the `backend/` directory:
+   ```
+   CONNECTION_STRING=your_mongodb_connection_string
+   DB_NAME=your_database_name
+   PORT=8000
+   ```
+
+   Create a `.env` file in the `frontend/` directory:
+   ```
+   AUTH_DISCORD_ID=your_discord_client_id
+   AUTH_DISCORD_SECRET=your_discord_client_secret
+   AUTH_SECRET=your_auth_secret
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   ```
 
 4. **Configure the game**
-   Update `config.json` with your game config.
+   Update `backend/config.json` with your game config.
    ```json
     {
         "pointScalingFactor":2.59,
@@ -60,12 +82,37 @@ Hosted at https://manipal-guessr.vercel.app/
    Image formats tested to work are avif and jpg. avif is recommended due to higher quality and lower file sizes.
 
 5. **Add location images**
-   Place your location photos in the `public/locationPictures/` directory, numbered from 1 to your `mapCount`.
+   Place your location photos in the `frontend/public/locationPictures/` directory, numbered from 1 to your `mapCount`.
 
-6. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+## Development
+
+Run both frontend and backend in development mode:
+
+```bash
+npm run dev
+```
+
+Or run them separately:
+
+```bash
+# Frontend only (runs on port 3000)
+npm run dev:frontend
+
+# Backend only (runs on port 8000)
+npm run dev:backend
+```
+
+## Building for Production
+
+```bash
+npm run build
+```
+
+## Starting Production Server
+
+```bash
+npm start
+```
 
 ## How to Play
 
