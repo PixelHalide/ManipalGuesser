@@ -39,6 +39,7 @@ const config: Config = Configuration as Config;
 
 // Routes
 app.get('/', (req, res) => {
+    console.log("API is Up");
   res.status(200).send("API is Up");
 });
 
@@ -51,7 +52,7 @@ app.post('/calcScore', (req, res: express.Response) => {
             userID
         }: CalcScoreRequestBody = req.body
 
-    const imgPath = `./public/locationPictures/${mapNumber}.${config.imageFormat}`;
+    const imgPath = `./locationPictures/${mapNumber}.${config.imageFormat}`;
 
     const coords = await gps(imgPath);
     let imageCords;
