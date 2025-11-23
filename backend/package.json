@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch index.ts",
-    "start": "node --loader tsx index.ts",
+    "dev": "tsx watch src/server.ts",
+    "start": "node --import tsx src/server.ts",
     "reset-weekly": "tsx resetWeekly.ts"
   },
   "dependencies": {
