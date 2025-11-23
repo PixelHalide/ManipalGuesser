@@ -22,7 +22,7 @@ Hosted at https://manipal-guessr.vercel.app/
 - **Authentication**: NextAuth v5
 - **Database**: MongoDB
 - **Maps**: Leaflet
-- **Image Handling**: EXIFR for metadata extraction
+- **Image Handling**: EXIFTool for metadata extraction
 - **Deployment**: Vercel
 
 ## Project Structure

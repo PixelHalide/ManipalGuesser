@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pkg from 'exifr';
+import { exiftool } from 'exiftool-vendored';
 import { appConfig } from '../config/appConfig';
 
 const { gps } = pkg;
@@ -22,6 +23,52 @@ type Coordinates = [number, number];
 
 const toRadians = (degrees: number): number => (degrees * Math.PI) / 180;
 
+const toSignedCoordinate = (value?: number | null, ref?: string | null): number | null => {
+  if (typeof value !== 'number') {
+    return null;
+  }
+
+  if (typeof ref === 'string') {
+    const firstChar = ref.trim().charAt(0).toUpperCase();
+    if (firstChar === 'S' || firstChar === 'W') {
+      return -Math.abs(value);
+    }
+  }
+
+  return value;
+};
+
+const getGpsCoords = async (imagePath: string): Promise<Coordinates> => {
+  try {
+    const coords = await gps(imagePath);
+    if (coords?.latitude != null && coords?.longitude != null) {
+      return [coords.latitude, coords.longitude];
+    }
+  } catch (error) {
+    console.warn(`exifr failed for ${imagePath}:`, error);
+  }
+
+  try {
+    const tags = await exiftool.read(imagePath);
+    const latitude = toSignedCoordinate(
+      (tags.GPSLatitude as number | undefined) ?? null,
+      (tags.GPSLatitudeRef as string | undefined) ?? null,
+    );
+    const longitude = toSignedCoordinate(
+      (tags.GPSLongitude as number | undefined) ?? null,
+      (tags.GPSLongitudeRef as string | undefined) ?? null,
+    );
+
+    if (latitude != null && longitude != null) {
+      return [latitude, longitude];
+    }
+  } catch (error) {
+    console.warn(`exiftool failed for ${imagePath}:`, error);
+  }
+
+  throw new Error('No GPS data found in EXIF');
+};
+
 const getImageCoordinates = async (mapNumber: number): Promise<Coordinates> => {
   const imageFile = path.resolve(
     __dirname,
@@ -29,13 +76,7 @@ const getImageCoordinates = async (mapNumber: number): Promise<Coordinates> => {
     `${mapNumber}.${appConfig.imageFormat}`,
   );
 
-  const coords = await gps(imageFile);
-
-  if (coords?.latitude == null || coords?.longitude == null) {
-    throw new Error('No GPS data found in EXIF');
-  }
-
-  return [coords.latitude, coords.longitude];
+  return getGpsCoords(imageFile);
 };
 
 const calculateDistance = (imageCoords: Coordinates, submittedCoords: Coordinates): number => {

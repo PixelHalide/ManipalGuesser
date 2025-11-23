@@ -3,6 +3,7 @@ import cors from 'cors';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
 import pkg from 'exifr';
+import { exiftool } from 'exiftool-vendored';
 import Configuration from './config.json' with { type: 'json' };
 const { gps } = pkg;
 
@@ -20,6 +21,45 @@ interface Config {
 dotenv.config()
 
 const app = express();
+
+const toSignedCoordinate = (value?: number | null, ref?: string | null): number | null => {
+    if (typeof value !== 'number') {
+        return null;
+    }
+
+    if (typeof ref === 'string') {
+        const firstChar = ref.trim().charAt(0).toUpperCase();
+        if (firstChar === 'S' || firstChar === 'W') {
+            return -Math.abs(value);
+        }
+    }
+
+    return value;
+};
+
+const getGpsCoords = async (imgPath: string): Promise<[number, number]> => {
+    try {
+        const coords = await gps(imgPath);
+        if (coords?.latitude != null && coords?.longitude != null) {
+            return [coords.latitude, coords.longitude];
+        }
+    } catch (error) {
+        console.warn(`exifr failed for ${imgPath}:`, error);
+    }
+
+    try {
+        const tags = await exiftool.read(imgPath);
+        const latitude = toSignedCoordinate(tags.GPSLatitude as number | undefined, tags.GPSLatitudeRef as string | undefined);
+        const longitude = toSignedCoordinate(tags.GPSLongitude as number | undefined, tags.GPSLongitudeRef as string | undefined);
+        if (latitude != null && longitude != null) {
+            return [latitude, longitude];
+        }
+    } catch (error) {
+        console.warn(`exiftool failed for ${imgPath}:`, error);
+    }
+
+    throw new Error('No GPS data found in EXIF');
+};
 
 // Middleware
 app.use(cors());
@@ -39,7 +79,6 @@ const config: Config = Configuration as Config;
 
 // Routes
 app.get('/', (req, res) => {
-    console.log("API is Up");
   res.status(200).send("API is Up");
 });
 
@@ -52,15 +91,9 @@ app.post('/calcScore', (req, res: express.Response) => {
             userID
         }: CalcScoreRequestBody = req.body
 
-    const imgPath = `./locationPictures/${mapNumber}.${config.imageFormat}`;
+    const imgPath = `./public/locationPictures/${mapNumber}.${config.imageFormat}`;
 
-    const coords = await gps(imgPath);
-    let imageCords;
-    if (coords?.latitude != null && coords?.longitude != null) {
-        imageCords = [coords.latitude, coords.longitude];
-    } else {
-        throw new Error('No GPS data found in EXIF');
-    }
+    const imageCords = await getGpsCoords(imgPath);
 
     const toRadians = (deg: number): number => deg * Math.PI / 180;
 
@@ -347,3 +380,16 @@ async function startServer() {
 }
 
 startServer();
+
+const shutdown = async () => {
+    try {
+        await exiftool.end();
+    } catch (error) {
+        console.warn('Error while shutting down exiftool:', error);
+    } finally {
+        process.exit(0);
+    }
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
