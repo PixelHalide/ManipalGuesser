@@ -48,7 +48,7 @@ This project is organized as a monorepo:
 
 3. **Set up environment variables**
 
-   Create a `.env` file in the `backend/` directory:
+   Create a `.env` file in the `backend/src` directory:
    ```
    CONNECTION_STRING=your_mongodb_connection_string
    DB_NAME=your_database_name
@@ -84,35 +84,6 @@ This project is organized as a monorepo:
 5. **Add location images**
    Place your location photos in the `frontend/public/locationPictures/` directory, numbered from 1 to your `mapCount`.
 
-## Development
-
-Run both frontend and backend in development mode:
-
-```bash
-npm run dev
-```
-
-Or run them separately:
-
-```bash
-# Frontend only (runs on port 3000)
-npm run dev:frontend
-
-# Backend only (runs on port 8000)
-npm run dev:backend
-```
-
-## Building for Production
-
-```bash
-npm run build
-```
-
-## Starting Production Server
-
-```bash
-npm start
-```
 
 ## How to Play
 
