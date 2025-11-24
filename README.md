@@ -16,10 +16,10 @@ Hosted at https://manipal-guessr.vercel.app/
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15, React 19, TypeScript
+- **Frontend**: Next.js, React, TypeScript
 - **Backend**: Express
 - **Styling**: Tailwind CSS
-- **Authentication**: NextAuth v5
+- **Authentication**: NextAuth
 - **Database**: MongoDB
 - **Maps**: Leaflet
 - **Image Handling**: EXIFTool for metadata extraction
