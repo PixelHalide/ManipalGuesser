@@ -17,4 +17,9 @@ export interface FeedbackRequestBody {
   message: string;
 }
 
+export interface SubmissionRequestBody {
+  boardPercentage: number;
+  metMarks: number;
+}
+
 export type LeaderboardCategory = 'weekly' | 'total';
