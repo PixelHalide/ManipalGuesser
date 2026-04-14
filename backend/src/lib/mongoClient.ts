@@ -21,10 +21,10 @@ export const getMongoClient = (): MongoClient => {
   return client;
 };
 
-export const getDb = (): Db => getMongoClient().db(env.dbName);
+export const getDb = (dbName?: string): Db => getMongoClient().db(dbName ?? env.dbName);
 
-export const getCollection = <TDocument extends Document = Document>(name: string): Collection<TDocument> =>
-  getDb().collection<TDocument>(name);
+export const getCollection = <TDocument extends Document = Document>(name: string, dbName?: string): Collection<TDocument> =>
+  getDb(dbName).collection<TDocument>(name);
 
 export const closeMongoClient = async (): Promise<void> => {
   if (client) {
