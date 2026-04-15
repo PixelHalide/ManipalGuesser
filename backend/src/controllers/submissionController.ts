@@ -17,9 +17,14 @@ const getClientIp = (req: Request<any, any, any>): string => {
 
 export const submissionController = {
   submit: asyncHandler(async (req: Request<unknown, unknown, SubmissionRequestBody>, res: Response) => {
-    const { boardPercentage, metMarks } = req.body;
+    const { boardPercentage, metMarks, bandScore, predictedRank } = req.body;
 
-    if (!isValidNumber(boardPercentage) || !isValidNumber(metMarks)) {
+    if (
+      !isValidNumber(boardPercentage) ||
+      !isValidNumber(metMarks) ||
+      !isValidNumber(bandScore) ||
+      !isValidNumber(predictedRank)
+    ) {
       res.status(400).json({ error: 'Invalid submission payload' });
       return;
     }
@@ -27,6 +32,8 @@ export const submissionController = {
     await submissionService.submitSubmission({
       boardPercentage,
       metMarks,
+      bandScore,
+      predictedRank,
       timestamp: new Date(),
       ip: getClientIp(req),
       userAgent: req.get('user-agent') || 'unknown',

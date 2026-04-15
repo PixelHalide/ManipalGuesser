@@ -20,6 +20,8 @@ export interface FeedbackRequestBody {
 export interface SubmissionRequestBody {
   boardPercentage: number;
   metMarks: number;
+  bandScore: number;
+  predictedRank: number;
 }
 
 export type LeaderboardCategory = 'weekly' | 'total';

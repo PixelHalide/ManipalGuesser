@@ -4,6 +4,8 @@ import { env } from '../config/env';
 interface SubmissionDocument {
   boardPercentage: number;
   metMarks: number;
+  bandScore: number;
+  predictedRank: number;
   timestamp: Date;
   ip: string;
   userAgent: string;
