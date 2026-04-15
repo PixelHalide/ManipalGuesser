@@ -7,10 +7,6 @@ interface SubmissionDocument {
   timestamp: Date;
   ip: string;
   userAgent: string;
-  metadata: {
-    method: string | null;
-    referer: string | null;
-  };
 }
 
 export const submissionService = {

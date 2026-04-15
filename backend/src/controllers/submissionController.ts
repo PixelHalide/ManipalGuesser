@@ -30,10 +30,6 @@ export const submissionController = {
       timestamp: new Date(),
       ip: getClientIp(req),
       userAgent: req.get('user-agent') || 'unknown',
-      metadata: {
-        method: req.get('x-original-host') ?? req.get('host') ?? null,
-        referer: req.get('referer') ?? null,
-      },
     });
 
     res.status(201).json({ success: true });
